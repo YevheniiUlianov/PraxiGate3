@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PraxiGate – Automatisierte Telefonie für medizinische Praxen und MVZ.">
+<title>PraxiGate – be always available</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ─── Reset ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter Tight',sans-serif;color:#1a2340;background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+ul{list-style:none}
+
+/* ─── Tokens ─── */
+:root{
+  --accent:#2B7FFF;
+  --accent-d:#1a6ae8;
+  --accent-deep:#0a50cc;
+  --dark:#0A1628;
+  --dark2:#0d1f3c;
+  --text:#3d4f6e;
+  --muted:#7a8fad;
+  --bg:#f4f7fc;
+  --bg2:#eef3fb;
+  --border:rgba(43,127,255,.15);
+  --glow:rgba(43,127,255,.18);
+  --sh:0 4px 24px rgba(43,127,255,.13);
+  --sh-lg:0 16px 56px rgba(43,127,255,.18);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --r:22px;--r-sm:14px;--r-xs:9px;
+}
+
+/* ─── Progress bar ─── */
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:9999;width:0;border-radius:0 3px 3px 0;transition:width .1s linear}
+
+/* ─── Header ─── */
+header{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:1000;width:calc(100% - 48px);max-width:1100px;border-radius:100px;background:rgba(255,255,255,.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.9);box-shadow:0 4px 32px rgba(10,22,40,.1);transition:background .3s,box-shadow .3s}
+header.scrolled{background:rgba(255,255,255,.92);box-shadow:0 8px 40px rgba(10,22,40,.14)}
+.nav-inner{padding:0 8px 0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
+nav{display:flex;align-items:center;gap:2px}
+nav a{padding:8px 14px;font-size:.875rem;font-weight:500;color:var(--text);border-radius:100px;transition:color .2s,background .2s}
+nav a:hover{color:var(--accent);background:rgba(43,127,255,.08)}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.btn-ghost{padding:9px 18px;border-radius:100px;font-size:.875rem;font-weight:600;color:var(--dark);border:1.5px solid var(--border);transition:border-color .2s,color .2s}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-cta-nav{padding:10px 22px;border-radius:100px;background:var(--accent);color:#fff;font-size:.875rem;font-weight:700;transition:background .25s,transform .25s,box-shadow .25s;box-shadow:0 4px 16px rgba(43,127,255,.35)}
+.btn-cta-nav:hover{background:var(--accent-d);transform:translateY(-1px);box-shadow:0 8px 24px rgba(43,127,255,.4)}
+.btn-cta-nav:active{transform:scale(.97)}
+.hamburger{display:none;padding:8px;border-radius:50%;background:transparent;cursor:pointer;flex-direction:column;gap:4.5px}
+.hamburger span{display:block;width:20px;height:2px;background:var(--dark);border-radius:2px;transition:.3s}
+.mob-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(255,255,255,.97);backdrop-filter:blur(16px);flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity .3s}
+.mob-overlay.open{opacity:1}
+.mob-overlay a{font-size:1.2rem;font-weight:700;color:var(--dark);padding:12px 40px;border-radius:100px;transition:background .2s,color .2s}
+.mob-overlay a:hover{background:rgba(43,127,255,.08);color:var(--accent)}
+.mob-close{position:absolute;top:20px;right:20px;font-size:1.5rem;color:var(--muted);padding:10px;cursor:pointer;line-height:1}
+
+/* ─── Buttons ─── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:100px;font-size:.9375rem;font-weight:700;transition:transform .25s var(--ease),box-shadow .25s,background .25s;cursor:pointer;letter-spacing:-.2px;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-200%);transition:transform .6s var(--ease)}
+.btn:hover::after{transform:translateX(200%)}
+.btn:active{transform:scale(.97)!important}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 24px rgba(43,127,255,.35)}
+.btn-primary:hover{background:var(--accent-d);transform:translateY(-2px);box-shadow:0 12px 36px rgba(43,127,255,.42)}
+.btn-outline{border:2px solid rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.1);backdrop-filter:blur(8px)}
+.btn-outline:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.7);transform:translateY(-2px)}
+.btn-outline-dark{border:2px solid var(--border);color:var(--dark);background:transparent}
+.btn-outline-dark:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.btn-white{background:#fff;color:var(--accent);box-shadow:var(--sh-lg)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 20px 60px rgba(43,127,255,.25)}
+
+/* ─── Animations ─── */
+@media(prefers-reduced-motion:no-preference){
+  [da]{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  [da].vis{opacity:1;transform:none}
+  [da=l]{transform:translateX(-40px)}[da=l].vis{transform:none}
+  [da=r]{transform:translateX(40px)}[da=r].vis{transform:none}
+  [da=s]{transform:scale(.94) translateY(18px)}[da=s].vis{transform:none}
+  [dd="1"]{transition-delay:.08s}[dd="2"]{transition-delay:.16s}[dd="3"]{transition-delay:.24s}
+  [dd="4"]{transition-delay:.32s}[dd="5"]{transition-delay:.40s}[dd="6"]{transition-delay:.48s}
+}
+
+/* ─── Sections ─── */
+section{padding:100px 24px}
+.container{max-width:1140px;margin:0 auto}
+.sec-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 18px;border-radius:100px;font-size:.8125rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:20px}
+.sec-badge.blue{background:rgba(43,127,255,.1);color:var(--accent);border:1px solid rgba(43,127,255,.2)}
+.sec-badge.white{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.sec-badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:#fff;line-height:1.08;letter-spacing:-2px}
+.h2{font-size:clamp(2rem,4.5vw,3.25rem);font-weight:800;color:var(--dark);line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px}
+.h2.white{color:#fff}
+.sub{font-size:1.0625rem;color:var(--text);line-height:1.7;max-width:580px}
+.sub.white{color:rgba(255,255,255,.75)}
+.sec-head{text-align:center;margin-bottom:72px}
+.sec-head .sub{margin:0 auto}
+
+/* ─── Hero ─── */
+#hero{padding:0;height:210vh;background:linear-gradient(160deg,#0a1628 0%,#0d2563 55%,#0a4acc 100%);position:relative}
+.hero-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center}
+.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(43,127,255,.45) 0%,transparent 70%);top:-200px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(100,160,255,.3) 0%,transparent 70%);top:40%;right:5%;pointer-events:none}
+.hero-glow3{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(43,127,255,.25) 0%,transparent 70%);top:30%;left:3%;pointer-events:none}
+.hero-text{padding:160px 24px 56px;text-align:center;position:relative;z-index:2;max-width:860px;margin:0 auto}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:100px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);color:#fff;font-size:.8125rem;font-weight:600;margin-bottom:28px}
+.hero-chip-icon{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:blink 2s infinite}
+.hero-title{margin-bottom:20px}
+.hero-desc{font-size:1.125rem;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:40px;max-width:600px;margin-left:auto;margin-right:auto}
+.hero-checks{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:44px}
+.hero-check{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.85);font-size:.9rem;font-weight:500}
+.hero-check svg{width:16px;height:16px;color:#4ade80;flex-shrink:0}
+.hero-btns{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.hero-mockup-wrap{width:100%;max-width:1000px;margin:-16px auto 0;padding:0 24px;position:relative;z-index:2;perspective:1200px}
+.hero-3d-card{transform-origin:50% 0%;will-change:transform;transform:rotateX(20deg) scale(1.05);border-radius:26px;border:3px solid #2e3f5c;padding:5px;background:#131e35;box-shadow:0 0 rgba(0,0,0,.30),0 9px 20px rgba(0,0,0,.29),0 37px 37px rgba(0,0,0,.26),0 84px 50px rgba(0,0,0,.15),0 149px 60px rgba(0,0,0,.04)}
+.hero-3d-inner{overflow:hidden;border-radius:20px}
+
+/* Browser mockup */
+.browser{background:#1a2340;border-radius:18px 18px 0 0;overflow:hidden;box-shadow:0 -4px 60px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}
+.browser-bar{background:#111827;padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.browser-dots{display:flex;gap:7px}
+.browser-dots span{width:12px;height:12px;border-radius:50%}
+.browser-dots span:nth-child(1){background:#ff5f57}
+.browser-dots span:nth-child(2){background:#febc2e}
+.browser-dots span:nth-child(3){background:#28c840}
+.browser-url{flex:1;background:rgba(255,255,255,.07);border-radius:8px;padding:6px 14px;font-size:.75rem;color:rgba(255,255,255,.4);font-family:monospace}
+.browser-body{display:flex;height:360px;overflow:hidden}
+.dash-sidebar{width:180px;background:#111827;padding:20px 12px;display:flex;flex-direction:column;gap:4px;border-right:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.dash-logo{display:flex;align-items:center;gap:8px;padding:0 8px 16px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:8px}
+.dash-logo-mark{width:28px;height:28px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;flex-shrink:0}
+.dash-logo-text{font-size:.8rem;font-weight:700;color:#fff}
+.dash-nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.75rem;color:rgba(255,255,255,.45);font-weight:500;cursor:pointer;transition:background .2s,color .2s}
+.dash-nav-item.active{background:rgba(43,127,255,.2);color:#60a5fa}
+.dash-nav-item svg{width:14px;height:14px;flex-shrink:0}
+.dash-main{flex:1;background:#0f1629;padding:20px 24px;overflow:hidden}
+.dash-greeting{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:16px}
+.dash-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.dash-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 14px}
+.dash-stat-num{font-size:1.25rem;font-weight:800;color:#fff;line-height:1}
+.dash-stat-label{font-size:.65rem;color:rgba(255,255,255,.45);margin-top:3px}
+.dash-stat-num.green{color:#4ade80}
+.dash-section-title{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.5px;margin-bottom:8px;text-transform:uppercase}
+.dash-call{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.03);margin-bottom:6px;border:1px solid rgba(255,255,255,.05)}
+.dash-call-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dash-call-name{font-size:.75rem;color:rgba(255,255,255,.8);font-weight:500;flex:1}
+.dash-call-time{font-size:.65rem;color:rgba(255,255,255,.35)}
+.dash-call-badge{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:100px}
+.badge-green{background:rgba(74,222,128,.15);color:#4ade80}
+.badge-blue{background:rgba(96,165,250,.15);color:#60a5fa}
+.dash-mini-chart{display:flex;align-items:flex-end;gap:4px;height:50px;margin-top:4px}
+.chart-bar{background:rgba(43,127,255,.4);border-radius:3px 3px 0 0;flex:1;transition:height .5s var(--ease)}
+.chart-bar.hi{background:var(--accent)}
+
+/* Cloud separator */
+.cloud-sep{width:100%;overflow:hidden;line-height:0;margin-top:-1px}
+.cloud-sep svg{display:block;width:100%}
+
+/* ─── Logos ─── */
+
+/* ─── Problem ─── */
+#problem{background:var(--dark);padding:100px 24px}
+.problem-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.prob-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:var(--r);padding:36px 30px;transition:background .3s,transform .35s var(--ease),border-color .3s}
+.prob-card:hover{background:rgba(43,127,255,.1);border-color:rgba(43,127,255,.3);transform:translateY(-6px)}
+.prob-icon{width:52px;height:52px;border-radius:14px;background:rgba(43,127,255,.18);display:flex;align-items:center;justify-content:center;margin-bottom:22px;transition:transform .3s}
+.prob-card:hover .prob-icon{transform:rotate(6deg) scale(1.05)}
+.prob-icon svg{width:24px;height:24px;color:#60a5fa}
+.prob-card h3{font-size:1.0625rem;font-weight:700;color:#fff;margin-bottom:10px}
+.prob-card p{font-size:.9375rem;color:rgba(255,255,255,.55);line-height:1.7}
+
+/* ─── Features ─── */
+.feat-section{padding:100px 24px}
+.feat-section.alt{background:var(--bg)}
+.feat-layout{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;max-width:1140px;margin:56px auto 0}
+.feat-layout.flip{direction:rtl}
+.feat-layout.flip>*{direction:ltr}
+.feat-img{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-lg);position:relative}
+.feat-img img{width:100%;height:360px;object-fit:cover;transition:transform .7s var(--ease)}
+.feat-img:hover img{transform:scale(1.05)}
+.feat-img-badge{position:absolute;bottom:20px;left:20px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh)}
+.feat-img-badge-icon{width:38px;height:38px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.feat-img-badge-icon svg{width:18px;height:18px;color:#fff}
+.feat-img-badge-num{font-size:1.1rem;font-weight:800;color:var(--dark);line-height:1}
+.feat-img-badge-label{font-size:.7rem;color:var(--muted);margin-top:1px}
+.feat-cards{display:flex;flex-direction:column;gap:16px;margin-top:32px}
+.feat-card-row{display:flex;gap:16px;align-items:flex-start;padding:22px;background:#fff;border:1px solid #e8edf5;border-radius:var(--r-sm);box-shadow:0 2px 12px rgba(10,22,40,.05);transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+.feat-section.alt .feat-card-row{background:#fff}
+.feat-card-row:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:rgba(43,127,255,.25)}
+.feat-icon{width:44px;height:44px;border-radius:12px;background:rgba(43,127,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s}
+.feat-card-row:hover .feat-icon{transform:rotate(5deg)}
+.feat-icon svg{width:20px;height:20px;color:var(--accent)}
+.feat-card-row h3{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:5px}
+.feat-card-row p{font-size:.875rem;color:var(--text);line-height:1.65}
+
+/* ─── Stats ─── */
+#stats{padding:100px 24px;background:linear-gradient(135deg,#0a1628 0%,#0d2563 100%);position:relative;overflow:hidden}
+#stats::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(43,127,255,.3) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px}
+.stat-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:36px 28px;text-align:center;backdrop-filter:blur(8px);transition:background .3s,transform .35s var(--ease),border-color .3s}
+.stat-card:hover{background:rgba(43,127,255,.15);border-color:rgba(43,127,255,.35);transform:translateY(-6px)}
+.stat-num{font-size:3rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-2px;margin-bottom:6px}
+.stat-num span{color:#60a5fa}
+.stat-icon{width:44px;height:44px;background:rgba(43,127,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.stat-icon svg{width:22px;height:22px;color:#60a5fa}
+.stat-label{font-size:.9375rem;color:rgba(255,255,255,.6);line-height:1.5;font-weight:500}
+
+/* ─── Steps ─── */
+#steps{padding:100px 24px;background:#fff}
+.steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:64px;position:relative}
+.steps-row::after{content:'';position:absolute;top:40px;left:calc(16.666% + 8px);right:calc(16.666% + 8px);height:2px;background:linear-gradient(90deg,var(--accent),rgba(43,127,255,.2));border-radius:2px;z-index:0}
+.step-box{text-align:center;padding:0 28px;position:relative;z-index:1}
+.step-circle{width:82px;height:82px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff;font-size:1.875rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;box-shadow:0 8px 32px rgba(43,127,255,.4);transition:transform .35s var(--ease),box-shadow .35s}
+.step-box:hover .step-circle{transform:scale(1.1);box-shadow:0 14px 42px rgba(43,127,255,.5)}
+.step-box h3{font-size:1.125rem;font-weight:700;color:var(--dark);margin-bottom:10px}
+.step-box p{font-size:.9375rem;color:var(--text);line-height:1.65}
+
+/* ─── Demo options ─── */
+#demo{padding:100px 24px;background:var(--bg)}
+.test-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:60px}
+.test-card{border-radius:var(--r);padding:44px 38px;border:1.5px solid #e0e8f4;background:#fff;box-shadow:0 2px 20px rgba(10,22,40,.06);transition:transform .35s var(--ease),box-shadow .35s,border-color .3s;display:flex;flex-direction:column;gap:20px}
+.test-card:hover{transform:translateY(-8px);box-shadow:var(--sh-lg);border-color:rgba(43,127,255,.3)}
+.test-card.featured{background:linear-gradient(140deg,var(--accent) 0%,var(--accent-deep) 100%);border-color:transparent;box-shadow:0 16px 56px rgba(43,127,255,.4)}
+.test-card.featured:hover{transform:translateY(-8px);box-shadow:0 24px 72px rgba(43,127,255,.5)}
+.test-tag{display:inline-flex;align-items:center;padding:5px 14px;border-radius:100px;font-size:.75rem;font-weight:700;letter-spacing:.4px;width:fit-content}
+.tag-green{background:rgba(74,222,128,.12);color:#16a34a;border:1px solid rgba(74,222,128,.25)}
+.tag-white{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.test-card h3{font-size:1.3rem;font-weight:800;color:var(--dark);line-height:1.3;letter-spacing:-.5px}
+.test-card.featured h3{color:#fff}
+.test-card p{font-size:.9375rem;color:var(--text);line-height:1.7;flex:1}
+.test-card.featured p{color:rgba(255,255,255,.8)}
+
+/* ─── Testimonials ─── */
+#testimonials{padding:100px 24px;background:#fff}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:60px}
+.testi-card{background:#fff;border:1.5px solid #e8edf5;border-radius:var(--r);padding:32px;box-shadow:0 2px 16px rgba(10,22,40,.06);transition:transform .35s var(--ease),box-shadow .35s,border-color .3s;display:flex;flex-direction:column;gap:18px}
+.testi-card:hover{transform:translateY(-8px);box-shadow:var(--sh-lg);border-color:rgba(43,127,255,.25)}
+.stars{display:flex;gap:3px}
+.star{color:#f59e0b;font-size:1rem}
+.testi-text{font-size:.9375rem;color:var(--text);line-height:1.75;flex:1;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:14px}
+.testi-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#fff;font-size:.875rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.testi-name{font-size:.9375rem;font-weight:700;color:var(--dark)}
+.testi-role{font-size:.8125rem;color:var(--muted)}
+.testi-cta{text-align:center;margin-top:60px}
+.testi-cta p{font-size:1rem;color:var(--text);margin-bottom:20px}
+
+/* ─── Calendar ─── */
+#termin{padding:100px 24px;background:var(--bg)}
+.cal-wrap{max-width:860px;margin:60px auto 0;background:#fff;border-radius:var(--r);box-shadow:var(--sh-lg);border:1.5px solid #e0e8f4;overflow:hidden}
+.cal-head{background:linear-gradient(135deg,var(--accent),var(--accent-deep));padding:26px 32px;display:flex;align-items:center;justify-content:space-between}
+.cal-head-title{font-size:1.0625rem;font-weight:700;color:#fff}
+.cal-btn{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:background .2s}
+.cal-btn:hover{background:rgba(255,255,255,.35)}
+.cal-btn svg{width:16px;height:16px}
+.cal-body{padding:24px 28px 28px}
+.cal-dnames{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
+.cal-dname{text-align:center;font-size:.7rem;font-weight:700;color:var(--muted);padding:6px;letter-spacing:.5px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:.875rem;font-weight:500;color:var(--dark);border:1.5px solid transparent;cursor:pointer;transition:all .22s var(--ease)}
+.cal-day.empty,.cal-day.disabled{color:#c8d4e8;cursor:default;pointer-events:none}
+.cal-day.available:hover{background:rgba(43,127,255,.1);color:var(--accent);transform:scale(1.08)}
+.cal-day.today{border-color:var(--accent);color:var(--accent);font-weight:700}
+.cal-day.selected{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(43,127,255,.4);transform:scale(1.1)}
+.cal-day.today.selected{border-color:transparent}
+.cal-slots-wrap{padding:22px 28px;background:var(--bg);border-top:1.5px solid #e8edf5;display:none}
+.cal-slots-wrap.show{display:block}
+.cal-slots-title{font-size:.9375rem;font-weight:700;color:var(--dark);margin-bottom:14px}
+.cal-slots{display:flex;flex-wrap:wrap;gap:10px}
+.cal-slot{padding:10px 18px;border:1.5px solid #dde5f4;border-radius:100px;font-size:.875rem;font-weight:600;color:var(--text);background:#fff;cursor:pointer;transition:all .22s var(--ease)}
+.cal-slot:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.cal-slot.selected{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(43,127,255,.3);transform:translateY(-2px)}
+.cal-form-wrap{padding:22px 28px;border-top:1.5px solid #e8edf5;display:none;animation:sld .4s var(--ease)}
+.cal-form-wrap.show{display:block}
+@keyframes sld{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.cal-form-title{font-size:.9375rem;font-weight:700;color:var(--dark);margin-bottom:18px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:.8125rem;font-weight:600;color:var(--dark)}
+.field input,.field select,.field textarea{padding:12px 16px;border:1.5px solid #dde5f4;border-radius:12px;font-size:.9375rem;font-family:inherit;color:var(--dark);background:#fff;outline:none;transition:border-color .25s,box-shadow .25s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(43,127,255,.1)}
+.field select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 4.5L11 1' stroke='%237a8fad' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.cal-success{padding:48px;text-align:center;display:none;animation:popIn .45s var(--ease)}
+.cal-success.show{display:block}
+@keyframes popIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+.success-ring{width:76px;height:76px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(34,197,94,.35)}
+.success-ring svg{width:34px;height:34px;color:#fff}
+.success-title{font-size:1.25rem;font-weight:800;color:var(--dark);margin-bottom:10px}
+.success-msg{font-size:.9375rem;color:var(--text);line-height:1.75}
+
+/* ─── Integration glow ─── */
+#integration{padding:100px 24px;background:var(--dark2);position:relative;overflow:hidden;text-align:center}
+.int-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(43,127,255,.35) 0%,rgba(43,127,255,.08) 50%,transparent 70%);pointer-events:none}
+.int-rings{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;pointer-events:none}
+.int-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(43,127,255,.12);animation:spin-ring linear infinite}
+.int-ring:nth-child(1){animation-duration:20s;inset:60px}
+.int-ring:nth-child(2){animation-duration:30s;inset:120px;animation-direction:reverse}
+.int-ring:nth-child(3){animation-duration:40s;inset:180px}
+@keyframes spin-ring{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.int-logo{width:80px;height:80px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;box-shadow:0 0 60px rgba(43,127,255,.5);position:relative;z-index:2}
+.int-logo svg{width:36px;height:36px;color:#fff}
+.int-content{position:relative;z-index:2;max-width:600px;margin:0 auto}
+
+/* ─── About ─── */
+#ueber-uns{padding:100px 24px;background:#fff}
+.about-layout{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-img{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-lg)}
+.about-img img{width:100%;height:480px;object-fit:cover;transition:transform .7s var(--ease)}
+.about-img:hover img{transform:scale(1.04)}
+.principles{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+.principle{display:flex;align-items:center;gap:12px;font-size:.9375rem;font-weight:500;color:var(--dark);padding:10px 0;border-bottom:1px solid #eef0f7}
+.principle:last-child{border-bottom:none}
+.p-dot{width:28px;height:28px;background:rgba(43,127,255,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.p-dot svg{width:13px;height:13px;color:var(--accent)}
+
+/* ─── Contact ─── */
+#kontakt{padding:100px 24px;background:var(--bg)}
+.contact-layout{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 1.5fr;gap:80px;align-items:start}
+.contact-detail{display:flex;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid #e8edf5}
+.cd-icon{width:44px;height:44px;background:rgba(43,127,255,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cd-icon svg{width:20px;height:20px;color:var(--accent)}
+.cd-label{font-size:.8125rem;color:var(--muted);margin-bottom:1px}
+.cd-val{font-size:.9375rem;font-weight:700;color:var(--dark)}
+.contact-form-box{background:#fff;border-radius:var(--r);padding:40px;border:1.5px solid #e0e8f4;box-shadow:0 4px 28px rgba(10,22,40,.07)}
+.contact-form-box h3{font-size:1.125rem;font-weight:800;color:var(--dark);margin-bottom:24px;letter-spacing:-.4px}
+.c-success{display:none;text-align:center;padding:40px;animation:popIn .45s var(--ease)}
+.c-success.show{display:block}
+
+/* ─── Footer ─── */
+footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:hidden}
+.footer-glow{position:absolute;bottom:-100px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(43,127,255,.2) 0%,transparent 70%);pointer-events:none}
+.footer-inner{max-width:1140px;margin:0 auto;position:relative;z-index:1}
+.footer-top{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+.footer-logo-wrap{display:flex;flex-direction:column;gap:6px}
+.footer-tagline{font-size:.75rem;color:rgba(255,255,255,.35)}
+.footer-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.footer-links a{font-size:.875rem;color:rgba(255,255,255,.5);padding:7px 14px;border-radius:100px;transition:color .2s,background .2s}
+.footer-links a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.footer-links a.pill{background:var(--accent);color:#fff;font-weight:700}
+.footer-links a.pill:hover{background:var(--accent-d)}
+.footer-bottom{text-align:center;padding-top:28px;font-size:.8125rem;color:rgba(255,255,255,.3)}
+
+/* ─── Responsive ─── */
+@media(max-width:1024px){
+  .feat-layout,.feat-layout.flip{grid-template-columns:1fr;direction:ltr}
+  .about-layout,.contact-layout{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .problem-cards{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  #hero{height:220vh}
+  section{padding:72px 20px}
+  #hero .hero-text{padding:120px 20px 36px}
+  .hero-3d-card{transform:rotateX(20deg) scale(0.7)}
+  .problem-cards,.testi-grid,.test-grid{grid-template-columns:1fr}
+  .steps-row{grid-template-columns:1fr;gap:36px}
+  .steps-row::after{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  nav{display:none}
+  .hamburger{display:flex}
+  .mob-overlay{display:flex}
+  .browser-body{height:260px}
+  .dash-sidebar{width:130px}
+  .fg2{grid-template-columns:1fr}
+  .footer-top{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center}
+}
+@media(max-width:540px){
+  .hero-btns{flex-direction:column;align-items:center}
+  .hero-checks{flex-direction:column;align-items:flex-start;padding:0 16px}
+  .stats-grid{grid-template-columns:1fr}
+  .btn-cta-nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ─── Header ─── -->
+<header id="hdr">
+  <div class="nav-inner">
+    <div class="logo">
+      <svg viewBox="0 0 135.09 27.43" height="26" fill="var(--accent)" xmlns="http://www.w3.org/2000/svg" aria-label="PraxiGate">
+        <path d="M29.62,8.54c0-.26-.02-.53-.04-.79C29.26,3.53,25.7,.08,21.46,.03c-4.45-.06-8.9-.02-13.34,0-1.19,0-2.35,.28-3.4,.85C1.66,2.56,.06,5.17,.03,8.65c-.05,4.93-.01,9.85-.01,14.78,0,1.23,0,2.46,0,3.69,0,.15-.03,.31,.22,.3,.73-.02,1.46,0,2.19-.03,.87-.05,1.59-.45,2.17-1.1,.53-.61,.76-1.33,.77-2.13,0-.29,0-.58,0-.88,.57,0,1.09,0,1.62,0,1.85-.03,3.16-1.27,3.32-3.11,.02-.24-.03-.42-.22-.58-2.93-2.46-3.03-7.49,.33-10.16,1.74-1.39,3.75-1.77,5.92-1.37,3.11,.58,5.5,3.5,5.43,6.67-.05,1.96-.72,3.65-2.26,4.93-.08,.07-.17,.2-.17,.29,.01,1.74,1.12,2.96,2.43,3.2,.72,.13,1.47,.08,2.21,.12,.12,0,.2,0,.31,0,0,.04,0,.18,0,.22,0,.4,0,.79,.05,1.19,.16,1.31,1.14,2.41,2.44,2.62,.81,.13,1.64,.07,2.46,.12,.31,.02,.39-.08,.39-.39,0-6.17,0-12.33,0-18.5Zm-2.71,14.7c-.1,0-.18,.02-.27,.02-.66,0-1.32,0-1.98,0-.08,0-.29,0-.36,0v-.42s0-6.87,0-10.3c0-1.17-.1-2.32-.64-3.38-1.25-2.44-3.22-3.79-5.99-3.84-1.88-.03-3.76,.02-5.64-.01-3.37-.07-6.14,2.61-6.59,5.7-.07,.46-.09,.93-.09,1.4,0,3.49,0,6.99,.01,10.48v.36H2.74c0-.13-.02-.24-.02-.35,0-3.98,.03-7.96,0-11.94-.03-4.08,2.98-7.39,6.68-8.1,.45-.09,.91-.14,1.36-.14,2.64-.01,5.28-.05,7.92,0,3.01,.06,5.36,1.4,7,3.93,.83,1.27,1.21,2.7,1.22,4.21,0,4.02,.01,8.04,.02,12.07,0,.1,0,.2-.01,.33Z"/>
+        <path d="M35.97,20.45V6.98h5.57c.13,0,.3,0,.5,.01,.21,0,.4,.03,.57,.06,.78,.12,1.42,.38,1.93,.78,.51,.4,.89,.9,1.13,1.51s.37,1.28,.37,2.02-.12,1.41-.37,2.02c-.25,.61-.63,1.11-1.14,1.51s-1.15,.66-1.92,.78c-.18,.03-.37,.04-.58,.06-.21,.01-.38,.02-.5,.02h-3.31v4.7h-2.25Zm2.25-6.81h3.22c.12,0,.26,0,.42-.02,.16-.01,.3-.04,.43-.08,.37-.09,.67-.26,.88-.5,.22-.24,.37-.5,.46-.8,.09-.3,.14-.59,.14-.88s-.05-.58-.14-.88c-.09-.3-.24-.57-.46-.81-.21-.24-.51-.4-.88-.5-.13-.04-.27-.06-.43-.07-.16,0-.3-.01-.42-.01h-3.22v4.55Z"/>
+        <path d="M55.72,15.35c.61-.26,1.09-.64,1.44-1.15,.56-.79,.83-1.73,.83-2.83,0-.74-.12-1.42-.37-2.02-.24-.61-.62-1.12-1.13-1.52-.51-.39-1.15-.65-1.93-.77-.17-.03-.36-.05-.57-.06-.21-.01-.37-.02-.5-.02h-5.57v13.47h2.25v-4.7h3.21l2.27,4.7h2.56l-2.49-5.1Zm-5.55-6.25h3.22c.13,0,.27,0,.42,.01,.16,.01,.3,.03,.43,.07,.38,.1,.67,.26,.89,.5,.21,.23,.36,.5,.45,.81,.1,.3,.14,.59,.14,.88s-.04,.58-.14,.88c-.09,.3-.24,.57-.45,.8-.22,.24-.51,.41-.89,.5-.13,.04-.27,.06-.43,.07-.15,.02-.29,.02-.42,.02h-3.22v-4.54Z"/>
+        <path d="M66.88,6.98h-3.3l-4.25,13.47h2.32l.92-2.92h5.3l.93,2.92h2.32l-4.24-13.47Zm-3.65,8.45l1.98-6.26,1.99,6.26h-3.97Z"/>
+        <path d="M71.68,20.45l4.56-6.81-4.43-6.66h2.76l3.07,4.74,3.04-4.74h2.78l-4.43,6.66,4.55,6.81h-2.76l-3.17-4.89-3.18,4.89h-2.78Z"/>
+        <path d="M85.25,20.45V6.98h2.25v13.47h-2.25Z"/>
+        <path d="M95.87,20.73c-.87,0-1.69-.15-2.45-.46-.76-.31-1.43-.76-2.01-1.36-.58-.6-1.03-1.33-1.35-2.2-.32-.87-.49-1.87-.49-2.99,0-1.47,.27-2.73,.82-3.77,.55-1.04,1.3-1.84,2.25-2.4,.95-.56,2.03-.84,3.23-.84,1.66,0,2.97,.39,3.94,1.15,.97,.77,1.63,1.85,1.97,3.24l-2.3,.36c-.26-.8-.67-1.44-1.25-1.91-.58-.48-1.32-.72-2.22-.72-.9-.01-1.66,.18-2.25,.59-.6,.41-1.05,.98-1.35,1.71-.3,.74-.45,1.6-.45,2.58s.15,1.84,.45,2.57c.3,.73,.75,1.29,1.35,1.7,.6,.41,1.35,.61,2.26,.63,.68,0,1.27-.12,1.79-.37,.51-.25,.93-.64,1.25-1.15,.32-.51,.54-1.16,.65-1.93h-2.38v-1.77h4.77c.01,.1,.02,.25,.03,.44s0,.31,0,.35c0,1.27-.25,2.4-.75,3.39-.5,.99-1.22,1.76-2.16,2.32-.94,.56-2.06,.84-3.36,.84Z"/>
+        <path d="M110.25,6.98h-3.31l-4.24,13.47h2.32l.92-2.92h5.3l.93,2.92h2.32l-4.24-13.47Zm-3.65,8.45l1.97-6.27,2,6.27h-3.97Z"/>
+        <path d="M118.28,20.45V9.09h-4.36v-2.11h10.97v2.11h-4.36v11.35h-2.25Z"/>
+        <path d="M126.39,20.45V6.98h8.7v2.11h-6.44v3.32h5.32v2.11h-5.32v3.81h6.44v2.11h-8.7Z"/>
+      </svg>
+    </div>
+    <nav>
+      <a href="#hero">Produkt</a>
+      <a href="#vorteile">Vorteile</a>
+      <a href="#demo">Demo</a>
+      <a href="#termin">Termin</a>
+      <a href="#kontakt">Kontakt</a>
+      <a href="#ueber-uns">Über uns</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#termin" class="btn-cta-nav">Termin buchen</a>
+    </div>
+    <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mob-overlay" id="mob">
+  <button class="mob-close" id="mobClose">✕</button>
+  <a href="#hero" class="ml">Produkt</a>
+  <a href="#vorteile" class="ml">Vorteile</a>
+  <a href="#demo" class="ml">Demo</a>
+  <a href="#termin" class="ml">Termin buchen</a>
+  <a href="#kontakt" class="ml">Kontakt</a>
+  <a href="#ueber-uns" class="ml">Über uns</a>
+</div>
+
+<!-- ─── Hero ─── -->
+<section id="hero">
+  <div class="hero-sticky">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-glow3"></div>
+  <div class="hero-text" id="heroText">
+    <div class="hero-chip" da dd="0"><span class="hero-chip-icon"></span>Für Praxis und MVZ entwickelt</div>
+    <h1 class="h1 hero-title" da dd="1">Seien Sie erreichbar.<br>Für Ihre <em style="font-style:normal;background:linear-gradient(90deg,#60a5fa,#93c5fd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Patienten.</em></h1>
+    <p class="hero-desc" da dd="2">Automatisierte Telefonie für medizinische Praxen und MVZ. Rund um die Uhr verfügbar – damit Ihr Team sich auf das Wesentliche konzentrieren kann.</p>
+    <div class="hero-checks" da dd="3">
+      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>90 Sekunden Reaktionszeit</div>
+      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>24/7 erreichbar</div>
+      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>DSGVO-konform</div>
+    </div>
+    <div class="hero-btns" da dd="4">
+      <a href="#demo" class="btn btn-primary">4 Wochen kostenlos testen</a>
+      <a href="#termin" class="btn btn-outline">Demo vereinbaren</a>
+    </div>
+  </div>
+  <!-- Browser Mockup – 3D scroll card -->
+  <div class="hero-mockup-wrap">
+    <div class="hero-3d-card" id="hero3dCard">
+    <div class="hero-3d-inner">
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dots"><span></span><span></span><span></span></div>
+        <div class="browser-url">app.praxigate.de/dashboard</div>
+      </div>
+      <div class="browser-body">
+        <div class="dash-sidebar">
+          <div class="dash-logo">
+            <div class="dash-logo-mark">PG</div>
+            <div class="dash-logo-text">PraxiGate</div>
+          </div>
+          <div class="dash-nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.42 2 2 0 0 1 3.6 1.23h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Anrufe
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Termine
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Patienten
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+            Einstellungen
+          </div>
+        </div>
+        <div class="dash-main">
+          <div class="dash-greeting">Guten Morgen, Dr. Müller 👋</div>
+          <div class="dash-stats-row">
+            <div class="dash-stat"><div class="dash-stat-num">127</div><div class="dash-stat-label">Anrufe heute</div></div>
+            <div class="dash-stat"><div class="dash-stat-num green">98%</div><div class="dash-stat-label">Erreichbarkeit</div></div>
+            <div class="dash-stat"><div class="dash-stat-num">43</div><div class="dash-stat-label">Neue Termine</div></div>
+          </div>
+          <div class="dash-section-title">Letzte Anrufe</div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#4ade80"></div><div class="dash-call-name">Müller, Hans</div><div class="dash-call-time">09:12</div><div class="dash-call-badge badge-green">Termin ✓</div></div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#60a5fa"></div><div class="dash-call-name">Schmidt, Anna</div><div class="dash-call-time">09:45</div><div class="dash-call-badge badge-blue">Rückruf</div></div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#4ade80"></div><div class="dash-call-name">Weber, Klaus</div><div class="dash-call-time">10:03</div><div class="dash-call-badge badge-green">Termin ✓</div></div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#60a5fa"></div><div class="dash-call-name">Fischer, Lea</div><div class="dash-call-time">10:21</div><div class="dash-call-badge badge-blue">Anfrage</div></div>
+        </div>
+      </div>
+    </div><!-- /browser -->
+    </div><!-- /hero-3d-inner -->
+    </div><!-- /hero-3d-card -->
+  </div><!-- /hero-mockup-wrap -->
+  </div><!-- /hero-sticky -->
+</section>
+
+<!-- ─── Problem ─── -->
+<section id="problem">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge white" da><span class="sec-badge-dot"></span>Das Problem</div>
+      <h2 class="h2 white" da dd="1">Das ständige Telefonklingeln unterbricht<br>den Arbeitsfluss Ihres Teams – Tag für Tag</h2>
+    </div>
+    <div class="problem-cards">
+      <div class="prob-card" da="s" dd="1">
+        <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Sinkende Zufriedenheit</h3>
+        <p>Durch ständiges Klingeln leidet die Zufriedenheit der Mitarbeiter und Patienten – ein Teufelskreis, der Ihre Praxis täglich belastet.</p>
+      </div>
+      <div class="prob-card" da="s" dd="2">
+        <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Hoher Stressfaktor</h3>
+        <p>MFAs sind permanent unter Zeitdruck und können sich nicht auf wichtige Aufgaben konzentrieren. Qualität und Wohlbefinden leiden täglich.</p>
+      </div>
+      <div class="prob-card" da="s" dd="3">
+        <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+        <h3>Verpasste Chancen</h3>
+        <p>Anrufe von Patienten bleiben oft unbeantwortet – dadurch gehen Termine und wichtige Kontakte verloren. Jeder verpasste Anruf ist ein verpasster Patient.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Für Ihre Praxis ─── -->
+<section id="vorteile" class="feat-section">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihre Praxis</div>
+      <h2 class="h2" da dd="1">Effizient, sicher und integriert</h2>
+      <p class="sub sec-head" da dd="2">Schluss mit Telefonstress – erleben Sie eine entspannte, reibungslose und effizient organisierte Patientenkommunikation.</p>
+    </div>
+    <div class="feat-layout">
+      <div class="feat-cards">
+        <div class="feat-card-row" da="s" dd="1">
+          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><h3>Keine Cloud – Sicher in Ihrer Praxis</h3><p>Alle Daten bleiben lokal in Ihrer Praxis – keine Cloud-Übertragung auf externe Server. Datenschutz nach DSGVO, höchste Sicherheit für Ihre Patienten.</p></div>
+        </div>
+        <div class="feat-card-row" da="s" dd="2">
+          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+          <div><h3>Management Board</h3><p>Modernes übersichtliches Dashboard mit Echtzeitinformationen, einfachen Auswertungen und direkter Anbindung an die tägliche Arbeit Ihres Teams.</p></div>
+        </div>
+        <div class="feat-card-row" da="s" dd="3">
+          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><path d="M9 6h9v9"/></svg></div>
+          <div><h3>Ganzheitliche Integration</h3><p>Nahtlose Integration mit allen gängigen PVS – einfach zusammenarbeitend statt Insel-Lösung, ohne großen technischen Aufwand.</p></div>
+        </div>
+      </div>
+      <div class="feat-img" da="r" dd="2">
+        <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=700&q=80" alt="Moderne Praxisrezeption">
+        <div class="feat-img-badge">
+          <div class="feat-img-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><div class="feat-img-badge-num">DSGVO</div><div class="feat-img-badge-label">Vollständig konform</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Für Ihr Team ─── -->
+<section class="feat-section alt">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihr Team</div>
+      <h2 class="h2" da dd="1">Weniger Unterbrechung – mehr Fokus</h2>
+    </div>
+    <div class="feat-layout flip">
+      <div class="feat-cards">
+        <div class="feat-card-row" da="s" dd="1">
+          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.42 2 2 0 0 1 3.6 1.23h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><h3>Keine Wartezeit, kein Chaos</h3><p>PraxiGate bearbeitet eingehende Anliegen direkt – egal ob Anfragen, Termine oder Rückfragen. Ihr Team wird deutlich entlastet.</p></div>
+        </div>
+        <div class="feat-card-row" da="s" dd="2">
+          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><h3>Anliegen in 90 Sekunden</h3><p>Klar strukturierte und sofortige Antworten in unter 90 Sekunden. Ein System, das mit Ihrem Praxisalltag mitwächst, statt ihn zu verlangsamen.</p></div>
+        </div>
+        <div class="feat-card-row" da="s" dd="3">
+          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+          <div><h3>Mehr Ruhe im Alltag</h3><p>Keine ständigen Störungen mehr – entspannte, fokussierte Aufgaben für Ihr gesamtes Team. Wohlbefinden und Qualität steigen messbar.</p></div>
+        </div>
+      </div>
+      <div class="feat-img" da="l" dd="2">
+        <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=700&q=80" alt="Medizinisches Team">
+        <div class="feat-img-badge">
+          <div class="feat-img-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div class="feat-img-badge-num">90 Sek.</div><div class="feat-img-badge-label">Reaktionszeit</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Für Patienten + Zukunft ─── -->
+<section class="feat-section">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihre Patienten</div>
+      <h2 class="h2" da dd="1">Einfach. Verständlich. Sofort erreichbar.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:800px;margin:0 auto 80px">
+      <div class="feat-card-row" da="s" dd="1" style="flex-direction:column;gap:14px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div><h3>Jederzeit erreichbar</h3><p>Rund um die Uhr – Patienten können sich jederzeit melden, Termine vereinbaren und Anliegen klären, auch außerhalb der Öffnungszeiten.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="2" style="flex-direction:column;gap:14px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div><h3>Multilanguage-Funktion</h3><p>PraxiGate kommuniziert in der Muttersprache Ihrer Patienten – Deutsch, Englisch und viele weitere Sprachen ohne Schwellen.</p></div>
+      </div>
+    </div>
+    <div class="sec-head" style="margin-bottom:40px">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihre Zukunft</div>
+      <h2 class="h2" da dd="1">Lösungen, die mitdenken und mitwachsen.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:800px;margin:0 auto">
+      <div class="feat-card-row" da="s" dd="1" style="flex-direction:column;gap:14px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+        <div><h3>Immer aktuell</h3><p>Regelmäßige Updates halten Sie technologisch immer einen Schritt voraus – agil und mit Ihren Praxiswünschen abgestimmt.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="2" style="flex-direction:column;gap:14px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div><h3>Innovative Technik</h3><p>Modernste Netzwerke, fortlaufend perfektionierte Funktionen – ein zuverlässiger, schneller Kommunikationsstrom für Ihre Praxis.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Stats ─── -->
+<section id="stats">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge white" da><span class="sec-badge-dot"></span>Warum PraxiGate</div>
+      <h2 class="h2 white" da dd="1">Messbare Ergebnisse für Ihre Praxis</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card" da="s" dd="1">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="stat-num"><span data-countup="90">0</span> Sek</div>
+        <div class="stat-label">Automatisierte Erkennung in unter 90 Sekunden</div>
+      </div>
+      <div class="stat-card" da="s" dd="2">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <div class="stat-num"><span data-countup="98">0</span><span>%</span></div>
+        <div class="stat-label">Erreichbarkeitsrate rund um die Uhr</div>
+      </div>
+      <div class="stat-card" da="s" dd="3">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div class="stat-num"><span data-countup="40">0</span><span>%</span></div>
+        <div class="stat-label">Weniger Stress für MFAs und das Team</div>
+      </div>
+      <div class="stat-card" da="s" dd="4">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="stat-num"><span data-countup="0">0</span><span style="font-size:1.5rem"> Cloud</span></div>
+        <div class="stat-label">Alle Daten bleiben lokal in Ihrer Praxis</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Steps ─── -->
+<section id="steps">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Einfacher Start</div>
+      <h2 class="h2" da dd="1">So einfach starten Sie mit PraxiGate</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">In nur drei Schritten ist Ihre Praxis bereit.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-box" da="s" dd="1">
+        <div class="step-circle">1</div>
+        <h3>Kontakt aufnehmen</h3>
+        <p>Sie nehmen mit uns Kontakt auf, wir besprechen gemeinsam Ihre Bedürfnisse und finden die optimale Lösung für Ihre Praxis.</p>
+      </div>
+      <div class="step-box" da="s" dd="2">
+        <div class="step-circle">2</div>
+        <h3>Einrichtung durch unser Team</h3>
+        <p>Unser Team übernimmt die vollständige Einrichtung, damit Ihr System von Anfang an reibungslos und zuverlässig läuft.</p>
+      </div>
+      <div class="step-box" da="s" dd="3">
+        <div class="step-circle">3</div>
+        <h3>Loslegen!</h3>
+        <p>Sie starten in Ihre entspannte Praxis und genießen klare Kommunikation und entlastete Mitarbeiter ab dem ersten Tag.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Demo ─── -->
+<section id="demo" style="padding:100px 24px;background:var(--bg)">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Kostenlos testen</div>
+      <h2 class="h2" da dd="1">Testen Sie PraxiGate – einfach, unverbindlich und kostenlos</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">PraxiGate kennenlernen – entspannt und unverbindlich.</p>
+    </div>
+    <div class="test-grid">
+      <div class="test-card" da="s" dd="1">
+        <div class="test-tag tag-green">Schneller Einblick</div>
+        <h3>Schneller Einblick in unser System</h3>
+        <p>Vereinbaren Sie einen kurzen, unverbindlichen Demo-Termin. Lernen Sie PraxiGate kennen und entdecken Sie die Stärken ohne technischen Aufwand.</p>
+        <a href="#termin" class="btn btn-outline-dark" style="align-self:flex-start">Demo vereinbaren</a>
+      </div>
+      <div class="test-card featured" da="s" dd="2">
+        <div class="test-tag tag-white">Empfohlen</div>
+        <h3>Kostenloser 4-Wochen-Testzeitraum</h3>
+        <p>Probieren Sie PraxiGate vier Wochen lang unverbindlich aus – ohne Verpflichtung. So haben Sie alle Zeit, in Ruhe eine fundierte Entscheidung zu treffen.</p>
+        <a href="#termin" class="btn btn-white" style="align-self:flex-start">4 Wochen kostenlos testen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Testimonials ─── -->
+<section id="testimonials">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Kundenstimmen</div>
+      <h2 class="h2" da dd="1">Was unsere Kunden sagen</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">Gedanken und Eindrücke direkt aus dem Arbeitsalltag.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card" da="s" dd="1">
+        <div class="stars" data-stars><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <p class="testi-text">„PraxiGate hat mich von Anfang an überzeugt. Der Praxisalltag läuft deutlich entspannter – das Team ist ausgeglichener und die Patienten zufriedener."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">TK</div>
+          <div><div class="testi-name">Dr. med. Thomas K.</div><div class="testi-role">Allgemeinarzt</div></div>
+        </div>
+      </div>
+      <div class="testi-card" da="s" dd="2">
+        <div class="stars" data-stars><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <p class="testi-text">„Schnelle Antworten, intuitives Tool – endlich unterbrechen keine ständigen Anrufe mehr den Arbeitsalltag. Ich kann mich voll auf meine Patienten konzentrieren."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">LS</div>
+          <div><div class="testi-name">Layla S.</div><div class="testi-role">Medizinische Fachangestellte</div></div>
+        </div>
+      </div>
+      <div class="testi-card" da="s" dd="3">
+        <div class="stars" data-stars><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <p class="testi-text">„Struktur, Übersicht, und endlich können wir Datenschutz wirklich leben. Genau das brauchen wir im Alltag – PraxiGate ist die Lösung, die wir gesucht haben."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AR</div>
+          <div><div class="testi-name">Anna R.</div><div class="testi-role">Praxismanagerin</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-cta" da dd="4">
+      <p>Noch unsicher? Lassen Sie sich überzeugen – ganz unverbindlich.</p>
+      <a href="#termin" class="btn btn-primary">Demo vereinbaren</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Calendar ─── -->
+<section id="termin" style="padding:100px 24px;background:var(--bg)">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Terminbuchung</div>
+      <h2 class="h2" da dd="1">Termin buchen – wählen Sie Ihren Wunschtermin</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">Buchen Sie unkompliziert online einen Termin für Demo oder Beratung.</p>
+    </div>
+    <div class="cal-wrap" da dd="3">
+      <div class="cal-head">
+        <button class="cal-btn" id="calPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="cal-head-title" id="calTitle"></div>
+        <button class="cal-btn" id="calNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+      <div class="cal-body">
+        <div class="cal-dnames">
+          <div class="cal-dname">MO</div><div class="cal-dname">DI</div><div class="cal-dname">MI</div>
+          <div class="cal-dname">DO</div><div class="cal-dname">FR</div>
+          <div class="cal-dname" style="color:#ef4444">SA</div><div class="cal-dname" style="color:#ef4444">SO</div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="cal-slots-wrap" id="calSlotsWrap">
+        <div class="cal-slots-title" id="calSlotsTitle">Uhrzeit wählen</div>
+        <div class="cal-slots" id="calSlots"></div>
+      </div>
+      <div class="cal-form-wrap" id="calFormWrap">
+        <div class="cal-form-title" id="calFormTitle">Ihre Angaben</div>
+        <form id="calForm" novalidate>
+          <div class="fg2">
+            <div class="field"><label>Name *</label><input type="text" id="cfName" placeholder="Ihr vollständiger Name" required></div>
+            <div class="field"><label>Praxisname *</label><input type="text" id="cfPraxis" placeholder="Name Ihrer Praxis" required></div>
+          </div>
+          <div class="fg2">
+            <div class="field"><label>E-Mail *</label><input type="email" id="cfEmail" placeholder="ihre@email.de" required></div>
+            <div class="field"><label>Telefon</label><input type="tel" id="cfTel" placeholder="+49 ..."></div>
+          </div>
+          <div class="field"><label>Art des Termins *</label>
+            <select id="cfType" required>
+              <option value="">– Bitte wählen –</option>
+              <option value="demo">Demo</option>
+              <option value="beratung">Beratung</option>
+              <option value="rueckruf">Rückruf</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Termin bestätigen</button>
+        </form>
+      </div>
+      <div class="cal-success" id="calSuccess">
+        <div class="success-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12" class="ck"/></svg></div>
+        <div class="success-title">Vielen Dank!</div>
+        <p class="success-msg" id="calSuccessMsg"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Integration ─── -->
+<section id="integration">
+  <div class="int-orb"></div>
+  <div class="int-rings"><div class="int-ring"></div><div class="int-ring"></div><div class="int-ring"></div></div>
+  <div class="int-content">
+    <div class="int-logo" da>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><path d="M9 6h9v9"/></svg>
+    </div>
+    <div class="sec-badge white" da dd="1"><span class="sec-badge-dot"></span>Integration</div>
+    <h2 class="h2 white" da dd="2">Nahtlose Integration mit Ihrem PVS</h2>
+    <p class="sub white" style="text-align:center;margin:16px auto 36px" da dd="3">PraxiGate verbindet sich mit allen gängigen Praxisverwaltungssystemen – schnell, einfach und ohne großen technischen Aufwand.</p>
+    <a href="#termin" class="btn btn-primary" da dd="4">Jetzt testen</a>
+  </div>
+</section>
+
+<!-- ─── Über uns ─── -->
+<section id="ueber-uns">
+  <div class="about-layout">
+    <div class="about-img" da="l">
+      <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=700&q=80" alt="Medizinisches Team">
+    </div>
+    <div>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Über uns</div>
+      <h2 class="h2" da dd="1">Gemeinsam mit der Praxis entwickelt – für echte Bedürfnisse im Alltag</h2>
+      <p style="font-size:1.0625rem;font-weight:700;color:var(--dark);margin-bottom:14px" da dd="2">Was uns antreibt: Verständliche Kommunikation</p>
+      <p style="font-size:.9375rem;color:var(--text);line-height:1.75;margin-bottom:8px" da dd="3">PraxiGate ist ein intelligentes System, entwickelt aus Praxiserfahrung. Wir lernen aus dem Alltag, sprechen mit den Anwendern und verstehen Bedürfnisse, bevor wir Lösungen entwickeln.</p>
+      <div class="principles">
+        <div class="principle" da dd="3"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Innovation mit MFAs und Ärzten</div>
+        <div class="principle" da dd="4"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Fokus auf Mensch und Alltag</div>
+        <div class="principle" da dd="5"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Direkter Praxisbezug statt Theorie</div>
+        <div class="principle" da dd="6"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Kontinuierlicher Dialog im Fortschritt</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Kontakt ─── -->
+<section id="kontakt" style="padding:100px 24px;background:var(--bg)">
+  <div class="contact-layout">
+    <div>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Kontakt</div>
+      <h2 class="h2" da dd="1">Kontaktieren Sie uns</h2>
+      <p style="font-size:.9375rem;color:var(--text);margin-bottom:40px;line-height:1.7" da dd="2">Schnell. Direkt. Wie Sie in der Zukunft.</p>
+      <div class="contact-detail" da dd="3">
+        <div class="cd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div><div class="cd-label">E-Mail</div><div class="cd-val">contact@praxigate.com</div></div>
+      </div>
+      <div class="contact-detail" da dd="4">
+        <div class="cd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.42 2 2 0 0 1 3.6 1.23h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><div class="cd-label">Telefon</div><div class="cd-val">+49 (0) — demnächst</div></div>
+      </div>
+    </div>
+    <div class="contact-form-box" da="r" dd="2">
+      <h3>Schreiben Sie uns</h3>
+      <form id="cForm" novalidate>
+        <div class="fg2">
+          <div class="field"><label>Name *</label><input type="text" id="cName" placeholder="Ihr Name" required></div>
+          <div class="field"><label>Unternehmen</label><input type="text" id="cCompany" placeholder="Ihre Praxis / MVZ"></div>
+        </div>
+        <div class="field"><label>E-Mail *</label><input type="email" id="cEmail" placeholder="ihre@email.de" required></div>
+        <div class="field"><label>Nachricht *</label><textarea id="cMsg" rows="5" placeholder="Wie können wir Ihnen helfen?" required style="resize:vertical"></textarea></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Senden</button>
+      </form>
+      <div class="c-success" id="cSuccess">
+        <div class="success-ring" style="margin:0 auto 16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="success-title">Nachricht gesendet!</div>
+        <p class="success-msg">Vielen Dank für Ihre Nachricht. Wir melden uns so schnell wie möglich bei Ihnen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <div class="footer-glow"></div>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo-wrap">
+          <svg viewBox="0 0 135.09 27.43" height="24" fill="#fff" xmlns="http://www.w3.org/2000/svg" aria-label="PraxiGate">
+            <path d="M29.62,8.54c0-.26-.02-.53-.04-.79C29.26,3.53,25.7,.08,21.46,.03c-4.45-.06-8.9-.02-13.34,0-1.19,0-2.35,.28-3.4,.85C1.66,2.56,.06,5.17,.03,8.65c-.05,4.93-.01,9.85-.01,14.78,0,1.23,0,2.46,0,3.69,0,.15-.03,.31,.22,.3,.73-.02,1.46,0,2.19-.03,.87-.05,1.59-.45,2.17-1.1,.53-.61,.76-1.33,.77-2.13,0-.29,0-.58,0-.88,.57,0,1.09,0,1.62,0,1.85-.03,3.16-1.27,3.32-3.11,.02-.24-.03-.42-.22-.58-2.93-2.46-3.03-7.49,.33-10.16,1.74-1.39,3.75-1.77,5.92-1.37,3.11,.58,5.5,3.5,5.43,6.67-.05,1.96-.72,3.65-2.26,4.93-.08,.07-.17,.2-.17,.29,.01,1.74,1.12,2.96,2.43,3.2,.72,.13,1.47,.08,2.21,.12,.12,0,.2,0,.31,0,0,.04,0,.18,0,.22,0,.4,0,.79,.05,1.19,.16,1.31,1.14,2.41,2.44,2.62,.81,.13,1.64,.07,2.46,.12,.31,.02,.39-.08,.39-.39,0-6.17,0-12.33,0-18.5Zm-2.71,14.7c-.1,0-.18,.02-.27,.02-.66,0-1.32,0-1.98,0-.08,0-.29,0-.36,0v-.42s0-6.87,0-10.3c0-1.17-.1-2.32-.64-3.38-1.25-2.44-3.22-3.79-5.99-3.84-1.88-.03-3.76,.02-5.64-.01-3.37-.07-6.14,2.61-6.59,5.7-.07,.46-.09,.93-.09,1.4,0,3.49,0,6.99,.01,10.48v.36H2.74c0-.13-.02-.24-.02-.35,0-3.98,.03-7.96,0-11.94-.03-4.08,2.98-7.39,6.68-8.1,.45-.09,.91-.14,1.36-.14,2.64-.01,5.28-.05,7.92,0,3.01,.06,5.36,1.4,7,3.93,.83,1.27,1.21,2.7,1.22,4.21,0,4.02,.01,8.04,.02,12.07,0,.1,0,.2-.01,.33Z"/>
+            <path d="M35.97,20.45V6.98h5.57c.13,0,.3,0,.5,.01,.21,0,.4,.03,.57,.06,.78,.12,1.42,.38,1.93,.78,.51,.4,.89,.9,1.13,1.51s.37,1.28,.37,2.02-.12,1.41-.37,2.02c-.25,.61-.63,1.11-1.14,1.51s-1.15,.66-1.92,.78c-.18,.03-.37,.04-.58,.06-.21,.01-.38,.02-.5,.02h-3.31v4.7h-2.25Zm2.25-6.81h3.22c.12,0,.26,0,.42-.02,.16-.01,.3-.04,.43-.08,.37-.09,.67-.26,.88-.5,.22-.24,.37-.5,.46-.8,.09-.3,.14-.59,.14-.88s-.05-.58-.14-.88c-.09-.3-.24-.57-.46-.81-.21-.24-.51-.4-.88-.5-.13-.04-.27-.06-.43-.07-.16,0-.3-.01-.42-.01h-3.22v4.55Z"/>
+            <path d="M55.72,15.35c.61-.26,1.09-.64,1.44-1.15,.56-.79,.83-1.73,.83-2.83,0-.74-.12-1.42-.37-2.02-.24-.61-.62-1.12-1.13-1.52-.51-.39-1.15-.65-1.93-.77-.17-.03-.36-.05-.57-.06-.21-.01-.37-.02-.5-.02h-5.57v13.47h2.25v-4.7h3.21l2.27,4.7h2.56l-2.49-5.1Zm-5.55-6.25h3.22c.13,0,.27,0,.42,.01,.16,.01,.3,.03,.43,.07,.38,.1,.67,.26,.89,.5,.21,.23,.36,.5,.45,.81,.1,.3,.14,.59,.14,.88s-.04,.58-.14,.88c-.09,.3-.24,.57-.45,.8-.22,.24-.51,.41-.89,.5-.13,.04-.27,.06-.43,.07-.15,.02-.29,.02-.42,.02h-3.22v-4.54Z"/>
+            <path d="M66.88,6.98h-3.3l-4.25,13.47h2.32l.92-2.92h5.3l.93,2.92h2.32l-4.24-13.47Zm-3.65,8.45l1.98-6.26,1.99,6.26h-3.97Z"/>
+            <path d="M71.68,20.45l4.56-6.81-4.43-6.66h2.76l3.07,4.74,3.04-4.74h2.78l-4.43,6.66,4.55,6.81h-2.76l-3.17-4.89-3.18,4.89h-2.78Z"/>
+            <path d="M85.25,20.45V6.98h2.25v13.47h-2.25Z"/>
+            <path d="M95.87,20.73c-.87,0-1.69-.15-2.45-.46-.76-.31-1.43-.76-2.01-1.36-.58-.6-1.03-1.33-1.35-2.2-.32-.87-.49-1.87-.49-2.99,0-1.47,.27-2.73,.82-3.77,.55-1.04,1.3-1.84,2.25-2.4,.95-.56,2.03-.84,3.23-.84,1.66,0,2.97,.39,3.94,1.15,.97,.77,1.63,1.85,1.97,3.24l-2.3,.36c-.26-.8-.67-1.44-1.25-1.91-.58-.48-1.32-.72-2.22-.72-.9-.01-1.66,.18-2.25,.59-.6,.41-1.05,.98-1.35,1.71-.3,.74-.45,1.6-.45,2.58s.15,1.84,.45,2.57c.3,.73,.75,1.29,1.35,1.7,.6,.41,1.35,.61,2.26,.63,.68,0,1.27-.12,1.79-.37,.51-.25,.93-.64,1.25-1.15,.32-.51,.54-1.16,.65-1.93h-2.38v-1.77h4.77c.01,.1,.02,.25,.03,.44s0,.31,0,.35c0,1.27-.25,2.4-.75,3.39-.5,.99-1.22,1.76-2.16,2.32-.94,.56-2.06,.84-3.36,.84Z"/>
+            <path d="M110.25,6.98h-3.31l-4.24,13.47h2.32l.92-2.92h5.3l.93,2.92h2.32l-4.24-13.47Zm-3.65,8.45l1.97-6.27,2,6.27h-3.97Z"/>
+            <path d="M118.28,20.45V9.09h-4.36v-2.11h10.97v2.11h-4.36v11.35h-2.25Z"/>
+            <path d="M126.39,20.45V6.98h8.7v2.11h-6.44v3.32h5.32v2.11h-5.32v3.81h6.44v2.11h-8.7Z"/>
+          </svg>
+          <div class="footer-tagline">be always available</div>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="#kontakt">Kontakt</a>
+        <a href="#">Datenschutz</a>
+        <a href="#">AGB</a>
+        <a href="#">Impressum</a>
+        <a href="#termin" class="pill">Termin buchen</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 PraxiGate Systems GmbH. Alle Rechte vorbehalten.</div>
+  </div>
+</footer>
+
+<script>
+/* ─── Progress ─── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll',()=>{
+  prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%';
+},{passive:true});
+
+/* ─── Header ─── */
+const hdr = document.getElementById('hdr');
+window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30),{passive:true});
+
+/* ─── Mobile Nav ─── */
+const mob=document.getElementById('mob'),ham=document.getElementById('ham'),mc=document.getElementById('mobClose');
+const openMob=()=>{mob.classList.add('open');document.body.style.overflow='hidden'};
+const closeMob=()=>{mob.classList.remove('open');document.body.style.overflow=''};
+ham.addEventListener('click',openMob);
+mc.addEventListener('click',closeMob);
+document.querySelectorAll('.ml').forEach(a=>a.addEventListener('click',closeMob));
+
+/* ─── Hero 3D Scroll Animation ─── */
+(function(){
+  const section=document.getElementById('hero');
+  const heroText=document.getElementById('heroText');
+  const card=document.getElementById('hero3dCard');
+  if(!section||!heroText||!card)return;
+  function tick(){
+    const rect=section.getBoundingClientRect();
+    const scrollable=section.offsetHeight-window.innerHeight;
+    if(scrollable<=0)return;
+    const p=Math.max(0,Math.min(1,-rect.top/scrollable));
+    const mob=window.innerWidth<=768;
+    const sStart=mob?0.7:1.05,sEnd=mob?0.9:1.0;
+    const rotate=20*(1-p);
+    const scale=sStart+(sEnd-sStart)*p;
+    const ty=-80*p;
+    card.style.transform='rotateX('+rotate+'deg) scale('+scale+')';
+    heroText.style.transform='translateY('+ty+'px)';
+  }
+  window.addEventListener('scroll',tick,{passive:true});
+  window.addEventListener('resize',tick,{passive:true});
+  tick();
+})();
+
+/* ─── Animations ─── */
+const mq=window.matchMedia('(prefers-reduced-motion:reduce)');
+if(!mq.matches){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}});
+  },{threshold:.13});
+  document.querySelectorAll('[da]').forEach(el=>obs.observe(el));
+  // Hero on load
+  document.querySelectorAll('#hero [da]').forEach(el=>{
+    const d=parseInt(el.getAttribute('dd')||0);
+    setTimeout(()=>el.classList.add('vis'),80+d*130);
+  });
+}else{
+  document.querySelectorAll('[da]').forEach(el=>{el.style.opacity=1;el.style.transform='none'});
+}
+
+/* ─── Count-up ─── */
+document.querySelectorAll('[data-countup]').forEach(el=>{
+  const target=parseInt(el.dataset.countup);
+  if(target===0){el.textContent='Keine';return;}
+  const co=new IntersectionObserver(entries=>{
+    if(!entries[0].isIntersecting)return;
+    const dur=1400,start=performance.now();
+    const tick=now=>{
+      const p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,3);
+      el.textContent=Math.round(ease*target);
+      if(p<1)requestAnimationFrame(tick);else el.textContent=target;
+    };
+    requestAnimationFrame(tick);
+    co.unobserve(el);
+  },{threshold:.5});
+  co.observe(el);
+});
+
+/* ─── Calendar ─── */
+const MDE=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const SLOTS=['09:00','10:00','11:00','13:00','14:00','15:00','16:00','17:00'];
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+let cYear=TODAY.getFullYear(),cMonth=TODAY.getMonth(),selD=null,selT=null;
+
+function renderCal(){
+  document.getElementById('calTitle').textContent=MDE[cMonth]+' '+cYear;
+  const g=document.getElementById('calGrid');g.innerHTML='';
+  const first=new Date(cYear,cMonth,1);
+  let sd=first.getDay();sd=sd===0?6:sd-1;
+  const dim=new Date(cYear,cMonth+1,0).getDate();
+  for(let i=0;i<sd;i++){const d=document.createElement('div');d.className='cal-day empty';g.appendChild(d);}
+  for(let d=1;d<=dim;d++){
+    const dt=new Date(cYear,cMonth,d),dow=dt.getDay();
+    const wk=dow===0||dow===6,past=dt<TODAY,isToday=dt.getTime()===TODAY.getTime();
+    const ok=!wk&&!past;
+    const cell=document.createElement('div');
+    cell.textContent=d;
+    cell.className='cal-day '+(ok?'available':'disabled')+(isToday?' today':'');
+    if(selD&&dt.toDateString()===selD.toDateString())cell.classList.add('selected');
+    if(ok)cell.addEventListener('click',()=>pickDay(dt));
+    cell.style.cssText='opacity:0;transform:scale(.8)';
+    const delay=(d+sd)*16;
+    setTimeout(()=>{cell.style.cssText='transition:all .28s var(--ease)';},delay);
+    setTimeout(()=>{cell.style.opacity=1;cell.style.transform=''},delay+20);
+    g.appendChild(cell);
+  }
+}
+
+function pickDay(dt){
+  selD=dt;selT=null;renderCal();
+  const wrap=document.getElementById('calSlotsWrap'),slots=document.getElementById('calSlots');
+  const ds=dt.toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('calSlotsTitle').textContent='Uhrzeit für '+ds+' wählen';
+  slots.innerHTML='';
+  SLOTS.forEach((s,i)=>{
+    const b=document.createElement('button');b.className='cal-slot';b.type='button';b.textContent=s;
+    b.style.cssText='opacity:0;transform:translateY(-8px)';
+    setTimeout(()=>{b.style.cssText='transition:all .22s var(--ease)';},i*45+80);
+    setTimeout(()=>{b.style.opacity=1;b.style.transform=''},i*45+100);
+    b.addEventListener('click',()=>pickSlot(s,b));
+    slots.appendChild(b);
+  });
+  wrap.classList.add('show');
+  document.getElementById('calFormWrap').classList.remove('show');
+  document.getElementById('calSuccess').classList.remove('show');
+  document.getElementById('calSlotsWrap').style.display='';
+  wrap.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function pickSlot(s,btn){
+  selT=s;
+  document.querySelectorAll('.cal-slot').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const fw=document.getElementById('calFormWrap');
+  const ds=selD.toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('calFormTitle').textContent='Termin am '+ds+' um '+s+' Uhr';
+  fw.classList.add('show');
+  fw.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+document.getElementById('calPrev').addEventListener('click',()=>{
+  const min=new Date(TODAY.getFullYear(),TODAY.getMonth(),1);
+  const prev=new Date(cYear,cMonth-1,1);
+  if(prev>=min){cMonth--;if(cMonth<0){cMonth=11;cYear--;}renderCal();}
+});
+document.getElementById('calNext').addEventListener('click',()=>{
+  const max=new Date(TODAY.getFullYear(),TODAY.getMonth()+2,1);
+  const next=new Date(cYear,cMonth+1,1);
+  if(next<max){cMonth++;if(cMonth>11){cMonth=0;cYear++;}renderCal();}
+});
+
+document.getElementById('calForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=document.getElementById('cfName').value.trim(),em=document.getElementById('cfEmail').value.trim(),t=document.getElementById('cfType').value;
+  if(!n||!em||!t){alert('Bitte füllen Sie alle Pflichtfelder aus.');return;}
+  const ds=selD.toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('calSuccessMsg').innerHTML='Ihr Termin am <strong>'+ds+'</strong> um <strong>'+selT+' Uhr</strong> wurde reserviert.<br>Wir senden Ihnen eine Bestätigung per E-Mail.';
+  document.getElementById('calSlotsWrap').style.display='none';
+  document.getElementById('calFormWrap').classList.remove('show');
+  const sc=document.getElementById('calSuccess');sc.classList.add('show');
+  const ck=sc.querySelector('.ck');
+  if(ck){const l=30;ck.style.strokeDasharray=l;ck.style.strokeDashoffset=l;ck.style.transition='none';requestAnimationFrame(()=>{ck.style.transition='stroke-dashoffset .6s var(--ease) .2s';ck.style.strokeDashoffset=0;});}
+  sc.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+
+/* ─── Contact form ─── */
+document.getElementById('cForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=document.getElementById('cName').value.trim(),em=document.getElementById('cEmail').value.trim(),m=document.getElementById('cMsg').value.trim();
+  if(!n||!em||!m){alert('Bitte füllen Sie alle Pflichtfelder aus.');return;}
+  document.getElementById('cForm').style.display='none';
+  document.getElementById('cSuccess').classList.add('show');
+});
+
+renderCal();
+</script>
+</body>
+</html>
