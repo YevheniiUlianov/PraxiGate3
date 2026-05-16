@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="PraxiGate – Automatisierte Telefonie für medizinische Praxen und MVZ.">
-<title>PraxiGate – be always available</title>
+<meta name="description" content="PraxiGate – Unified Messaging für medizinische Praxen. Telefon, Fax und E-Mail in einem Posteingang.">
+<title>PraxiGate – Unified Messaging für die Praxis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -377,6 +377,33 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
   .stats-grid{grid-template-columns:1fr}
   .btn-cta-nav{display:none}
 }
+
+/* ─── Disclaimer Ribbon ─── */
+.disclaimer-ribbon{background:#fffbeb;border:1.5px solid #fbbf24;border-radius:var(--r);padding:24px 28px;margin-bottom:32px;font-size:.9375rem;color:#92400e;line-height:1.7}
+.disclaimer-ribbon strong{color:#78350f}
+
+/* ─── Channel flow ─── */
+.channel-flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:32px 0}
+.channel-pill{background:#fff;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:14px 22px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:8px;box-shadow:0 2px 12px rgba(10,22,40,.05)}
+.channel-arrow-down{font-size:1.5rem;color:var(--muted);width:100%;text-align:center;margin:4px 0}
+.channel-inbox{background:var(--accent);color:#fff;border-radius:var(--r-sm);padding:18px 32px;font-weight:800;font-size:1rem;box-shadow:var(--sh);text-align:center}
+
+/* ─── Anliegen grid ─── */
+.anliegen-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px}
+@media(max-width:1024px){.anliegen-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.anliegen-grid{grid-template-columns:1fr}}
+
+/* ─── Compare table ─── */
+.compare-wrap{overflow-x:auto;margin-top:24px}
+.compare-table{width:100%;border-collapse:collapse;font-size:.9375rem;background:#fff}
+.compare-table th,.compare-table td{border:1px solid #e8edf5;padding:14px 18px;text-align:left;vertical-align:top}
+.compare-table th{background:var(--bg);font-weight:700;color:var(--dark);font-size:.875rem}
+.compare-table td.yes{color:#16a34a;font-weight:700}
+.compare-table td.no{color:#dc2626;font-weight:700}
+.compare-table tbody tr:hover td{background:#f8fbff}
+
+/* ─── Badge orange ─── */
+.badge-orange{background:rgba(251,146,60,.15);color:#fb923c}
 </style>
 </head>
 <body>
@@ -401,15 +428,14 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
       </svg>
     </div>
     <nav>
-      <a href="#hero">Produkt</a>
-      <a href="#vorteile">Vorteile</a>
-      <a href="#demo">Demo</a>
-      <a href="#termin">Termin</a>
-      <a href="#kontakt">Kontakt</a>
-      <a href="#ueber-uns">Über uns</a>
+      <a href="#was-ist">Was ist PraxiGate</a>
+      <a href="#anliegen">Anliegen</a>
+      <a href="#varianten">Cloud & Lokal</a>
+      <a href="#vergleich">Vergleich</a>
+      <a href="#ueber-uns">Über Siomet</a>
     </nav>
     <div class="nav-actions">
-      <a href="#termin" class="btn-cta-nav">Termin buchen</a>
+      <a href="#termin" class="btn-cta-nav">Demo anfragen</a>
     </div>
     <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
   </div>
@@ -417,12 +443,12 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
 
 <div class="mob-overlay" id="mob">
   <button class="mob-close" id="mobClose">✕</button>
-  <a href="#hero" class="ml">Produkt</a>
-  <a href="#vorteile" class="ml">Vorteile</a>
-  <a href="#demo" class="ml">Demo</a>
-  <a href="#termin" class="ml">Termin buchen</a>
-  <a href="#kontakt" class="ml">Kontakt</a>
-  <a href="#ueber-uns" class="ml">Über uns</a>
+  <a href="#was-ist" class="ml">Was ist PraxiGate</a>
+  <a href="#anliegen" class="ml">Anliegen</a>
+  <a href="#varianten" class="ml">Cloud & Lokal</a>
+  <a href="#vergleich" class="ml">Vergleich</a>
+  <a href="#termin" class="ml">Demo anfragen</a>
+  <a href="#ueber-uns" class="ml">Über Siomet</a>
 </div>
 
 <!-- ─── Hero ─── -->
@@ -432,17 +458,17 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
   <div class="hero-glow2"></div>
   <div class="hero-glow3"></div>
   <div class="hero-text" id="heroText">
-    <div class="hero-chip" da dd="0"><span class="hero-chip-icon"></span>Für Praxis und MVZ entwickelt</div>
-    <h1 class="h1 hero-title" da dd="1">Seien Sie erreichbar.<br>Für Ihre <em style="font-style:normal;background:linear-gradient(90deg,#60a5fa,#93c5fd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Patienten.</em></h1>
-    <p class="hero-desc" da dd="2">Automatisierte Telefonie für medizinische Praxen und MVZ. Rund um die Uhr verfügbar – damit Ihr Team sich auf das Wesentliche konzentrieren kann.</p>
+    <div class="hero-chip" da dd="0"><span class="hero-chip-icon"></span>Unified Messaging für Praxen &amp; MVZ</div>
+    <h1 class="h1 hero-title" da dd="1">Ein Posteingang für<br><em style="font-style:normal;background:linear-gradient(90deg,#60a5fa,#93c5fd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Telefon, Fax und E-Mail.</em></h1>
+    <p class="hero-desc" da dd="2">PraxiGate vereint alle Kommunikationskanäle Ihrer Praxis in einer einzigen Oberfläche. Weniger Aufwand für Ihr Team – schnellere Antworten für Ihre Patienten.</p>
     <div class="hero-checks" da dd="3">
-      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>90 Sekunden Reaktionszeit</div>
-      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>24/7 erreichbar</div>
-      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>DSGVO-konform</div>
+      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Unified Messaging</div>
+      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Max. 5 Min. bis zur Erledigung</div>
+      <div class="hero-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Cloud oder lokal</div>
     </div>
     <div class="hero-btns" da dd="4">
-      <a href="#demo" class="btn btn-primary">4 Wochen kostenlos testen</a>
-      <a href="#termin" class="btn btn-outline">Demo vereinbaren</a>
+      <a href="#termin" class="btn btn-primary">Demo vereinbaren</a>
+      <a href="#was-ist" class="btn btn-outline">So funktioniert PraxiGate</a>
     </div>
   </div>
   <!-- Browser Mockup – 3D scroll card -->
@@ -461,20 +487,20 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
             <div class="dash-logo-text">PraxiGate</div>
           </div>
           <div class="dash-nav-item active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-            Dashboard
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Posteingang
           </div>
           <div class="dash-nav-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.42 2 2 0 0 1 3.6 1.23h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             Anrufe
           </div>
           <div class="dash-nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Termine
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            Fax
           </div>
           <div class="dash-nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            Patienten
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Termine
           </div>
           <div class="dash-nav-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
@@ -482,17 +508,17 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
           </div>
         </div>
         <div class="dash-main">
-          <div class="dash-greeting">Guten Morgen, Dr. Müller 👋</div>
+          <div class="dash-greeting">Unified Posteingang – Praxis Müller 📬</div>
           <div class="dash-stats-row">
-            <div class="dash-stat"><div class="dash-stat-num">127</div><div class="dash-stat-label">Anrufe heute</div></div>
-            <div class="dash-stat"><div class="dash-stat-num green">98%</div><div class="dash-stat-label">Erreichbarkeit</div></div>
-            <div class="dash-stat"><div class="dash-stat-num">43</div><div class="dash-stat-label">Neue Termine</div></div>
+            <div class="dash-stat"><div class="dash-stat-num">12</div><div class="dash-stat-label">Offen</div></div>
+            <div class="dash-stat"><div class="dash-stat-num green">98%</div><div class="dash-stat-label">Erledigt heute</div></div>
+            <div class="dash-stat"><div class="dash-stat-num">4:32</div><div class="dash-stat-label">Ø Reaktionszeit</div></div>
           </div>
-          <div class="dash-section-title">Letzte Anrufe</div>
-          <div class="dash-call"><div class="dash-call-dot" style="background:#4ade80"></div><div class="dash-call-name">Müller, Hans</div><div class="dash-call-time">09:12</div><div class="dash-call-badge badge-green">Termin ✓</div></div>
-          <div class="dash-call"><div class="dash-call-dot" style="background:#60a5fa"></div><div class="dash-call-name">Schmidt, Anna</div><div class="dash-call-time">09:45</div><div class="dash-call-badge badge-blue">Rückruf</div></div>
-          <div class="dash-call"><div class="dash-call-dot" style="background:#4ade80"></div><div class="dash-call-name">Weber, Klaus</div><div class="dash-call-time">10:03</div><div class="dash-call-badge badge-green">Termin ✓</div></div>
-          <div class="dash-call"><div class="dash-call-dot" style="background:#60a5fa"></div><div class="dash-call-name">Fischer, Lea</div><div class="dash-call-time">10:21</div><div class="dash-call-badge badge-blue">Anfrage</div></div>
+          <div class="dash-section-title">Letzte Anliegen</div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#4ade80"></div><div class="dash-call-name">Müller, Hans · Anruf</div><div class="dash-call-time">09:12</div><div class="dash-call-badge badge-green">Rezept ✓</div></div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#fb923c"></div><div class="dash-call-name">Schmidt, Anna · Fax</div><div class="dash-call-time">09:45</div><div class="dash-call-badge badge-orange">Überweisung</div></div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#4ade80"></div><div class="dash-call-name">Weber, Klaus · E-Mail</div><div class="dash-call-time">10:03</div><div class="dash-call-badge badge-green">Termin ✓</div></div>
+          <div class="dash-call"><div class="dash-call-dot" style="background:#60a5fa"></div><div class="dash-call-name">Fischer, Lea · Anruf</div><div class="dash-call-time">10:21</div><div class="dash-call-badge badge-blue">AU-Anfrage</div></div>
         </div>
       </div>
     </div><!-- /browser -->
@@ -507,124 +533,246 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
   <div class="container">
     <div class="sec-head">
       <div class="sec-badge white" da><span class="sec-badge-dot"></span>Das Problem</div>
-      <h2 class="h2 white" da dd="1">Das ständige Telefonklingeln unterbricht<br>den Arbeitsfluss Ihres Teams – Tag für Tag</h2>
+      <h2 class="h2 white" da dd="1">Jeder Kanal eine eigene Baustelle.</h2>
+      <p class="sub white sec-head" da dd="2">Telefon klingelt während der Sprechstunde. Faxgerät stapelt Rezeptanfragen. E-Mails bleiben stundenlang unbeantwortet. Drei Kanäle, drei Workflows, dreifacher Aufwand.</p>
     </div>
     <div class="problem-cards">
       <div class="prob-card" da="s" dd="1">
         <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <h3>Sinkende Zufriedenheit</h3>
-        <p>Durch ständiges Klingeln leidet die Zufriedenheit der Mitarbeiter und Patienten – ein Teufelskreis, der Ihre Praxis täglich belastet.</p>
+        <h3>Hoher manueller Aufwand</h3>
+        <p>MFAs springen den ganzen Tag zwischen Hörer, Fax-Ausdruck und Posteingang hin und her – jede Anfrage wird mehrfach angefasst.</p>
       </div>
       <div class="prob-card" da="s" dd="2">
-        <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-        <h3>Hoher Stressfaktor</h3>
-        <p>MFAs sind permanent unter Zeitdruck und können sich nicht auf wichtige Aufgaben konzentrieren. Qualität und Wohlbefinden leiden täglich.</p>
+        <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>Lange Wartezeit für Patienten</h3>
+        <p>Anfragen liegen unbearbeitet, weil kein Kanal Priorität hat. Patienten wissen nicht, ob ihre Nachricht überhaupt angekommen ist.</p>
       </div>
       <div class="prob-card" da="s" dd="3">
-        <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-        <h3>Verpasste Chancen</h3>
-        <p>Anrufe von Patienten bleiben oft unbeantwortet – dadurch gehen Termine und wichtige Kontakte verloren. Jeder verpasste Anruf ist ein verpasster Patient.</p>
+        <div class="prob-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+        <h3>Keine Übersicht</h3>
+        <p>Was wurde beantwortet? Was ist noch offen? In drei getrennten Systemen lässt sich das nicht zuverlässig nachhalten.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── Für Ihre Praxis ─── -->
-<section id="vorteile" class="feat-section">
+<!-- ─── Was ist PraxiGate ─── -->
+<section id="was-ist" class="feat-section">
   <div class="container">
     <div class="sec-head">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihre Praxis</div>
-      <h2 class="h2" da dd="1">Effizient, sicher und integriert</h2>
-      <p class="sub sec-head" da dd="2">Schluss mit Telefonstress – erleben Sie eine entspannte, reibungslose und effizient organisierte Patientenkommunikation.</p>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Was ist PraxiGate</div>
+      <h2 class="h2" da dd="1">Eine Plattform. Alle Kanäle. Ein Posteingang.</h2>
+      <p class="sub sec-head" da dd="2">PraxiGate bündelt Telefon, Fax und E-Mail in einer Oberfläche – Ihr Team sieht alle Patientenanfragen einheitlich, priorisiert und beantwortet sie in unter 5 Minuten.</p>
     </div>
-    <div class="feat-layout">
-      <div class="feat-cards">
-        <div class="feat-card-row" da="s" dd="1">
-          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div><h3>Keine Cloud – Sicher in Ihrer Praxis</h3><p>Alle Daten bleiben lokal in Ihrer Praxis – keine Cloud-Übertragung auf externe Server. Datenschutz nach DSGVO, höchste Sicherheit für Ihre Patienten.</p></div>
-        </div>
-        <div class="feat-card-row" da="s" dd="2">
-          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
-          <div><h3>Management Board</h3><p>Modernes übersichtliches Dashboard mit Echtzeitinformationen, einfachen Auswertungen und direkter Anbindung an die tägliche Arbeit Ihres Teams.</p></div>
-        </div>
-        <div class="feat-card-row" da="s" dd="3">
-          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><path d="M9 6h9v9"/></svg></div>
-          <div><h3>Ganzheitliche Integration</h3><p>Nahtlose Integration mit allen gängigen PVS – einfach zusammenarbeitend statt Insel-Lösung, ohne großen technischen Aufwand.</p></div>
-        </div>
+    <div da dd="3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:860px;margin:0 auto 28px">
+      <div style="background:#fff;border:1.5px solid #e8edf5;border-radius:var(--r);padding:28px 24px;box-shadow:0 2px 16px rgba(10,22,40,.06);transition:transform .3s var(--ease),box-shadow .3s,border-color .3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(43,127,255,.13)';this.style.borderColor='rgba(43,127,255,.3)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 16px rgba(10,22,40,.06)';this.style.borderColor='#e8edf5'">
+        <div style="font-size:1.5rem;margin-bottom:14px">📞</div>
+        <div style="font-size:1.0625rem;font-weight:700;color:var(--dark);margin-bottom:8px">Telefon</div>
+        <div style="font-size:.875rem;color:var(--text);line-height:1.65">Anrufe, Mailbox, Rückrufwünsche – strukturiert erfasst und zugewiesen.</div>
       </div>
-      <div class="feat-img" da="r" dd="2">
-        <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=700&q=80" alt="Moderne Praxisrezeption">
-        <div class="feat-img-badge">
-          <div class="feat-img-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div><div class="feat-img-badge-num">DSGVO</div><div class="feat-img-badge-label">Vollständig konform</div></div>
-        </div>
+      <div style="background:#fff;border:1.5px solid #e8edf5;border-radius:var(--r);padding:28px 24px;box-shadow:0 2px 16px rgba(10,22,40,.06);transition:transform .3s var(--ease),box-shadow .3s,border-color .3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(43,127,255,.13)';this.style.borderColor='rgba(43,127,255,.3)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 16px rgba(10,22,40,.06)';this.style.borderColor='#e8edf5'">
+        <div style="font-size:1.5rem;margin-bottom:14px">📠</div>
+        <div style="font-size:1.0625rem;font-weight:700;color:var(--dark);margin-bottom:8px">Fax</div>
+        <div style="font-size:.875rem;color:var(--text);line-height:1.65">Rezeptanfragen, Überweisungen, Befunde – digital und sofort bearbeitbar.</div>
+      </div>
+      <div style="background:#fff;border:1.5px solid #e8edf5;border-radius:var(--r);padding:28px 24px;box-shadow:0 2px 16px rgba(10,22,40,.06);transition:transform .3s var(--ease),box-shadow .3s,border-color .3s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(43,127,255,.13)';this.style.borderColor='rgba(43,127,255,.3)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 16px rgba(10,22,40,.06)';this.style.borderColor='#e8edf5'">
+        <div style="font-size:1.5rem;margin-bottom:14px">✉️</div>
+        <div style="font-size:1.0625rem;font-weight:700;color:var(--dark);margin-bottom:8px">E-Mail</div>
+        <div style="font-size:.875rem;color:var(--text);line-height:1.65">Allgemeine Anliegen, Anhänge, Nachfragen – priorisiert im einheitlichen Posteingang.</div>
       </div>
     </div>
+    <div style="text-align:center;color:var(--muted);font-size:1.25rem;margin-bottom:20px" da dd="4">↓</div>
+    <div class="channel-inbox" da dd="5">Ein einheitlicher PraxiGate-Posteingang<br><span style="font-size:.85rem;font-weight:500;opacity:.85">Strukturiert · klassifiziert · priorisiert · erledigt in &lt; 5 Min</span></div>
   </div>
 </section>
 
-<!-- ─── Für Ihr Team ─── -->
+<!-- ─── 5-Minuten-Versprechen ─── -->
 <section class="feat-section alt">
   <div class="container">
     <div class="sec-head">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihr Team</div>
-      <h2 class="h2" da dd="1">Weniger Unterbrechung – mehr Fokus</h2>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Das 5-Minuten-Versprechen</div>
+      <h2 class="h2" da dd="1">Vom Patientenanliegen bis zur Erledigung: maximal 5 Minuten.</h2>
     </div>
     <div class="feat-layout flip">
       <div class="feat-cards">
         <div class="feat-card-row" da="s" dd="1">
           <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.42 2 2 0 0 1 3.6 1.23h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-          <div><h3>Keine Wartezeit, kein Chaos</h3><p>PraxiGate bearbeitet eingehende Anliegen direkt – egal ob Anfragen, Termine oder Rückfragen. Ihr Team wird deutlich entlastet.</p></div>
+          <div><h3>0:30 – Erkennung &amp; Routing</h3><p>Anliegen wird automatisch klassifiziert (Termin, Rezept, AU, Überweisung …) und der zuständigen MFA zugewiesen.</p></div>
         </div>
         <div class="feat-card-row" da="s" dd="2">
           <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div><h3>Anliegen in 90 Sekunden</h3><p>Klar strukturierte und sofortige Antworten in unter 90 Sekunden. Ein System, das mit Ihrem Praxisalltag mitwächst, statt ihn zu verlangsamen.</p></div>
+          <div><h3>2:00 – Bearbeitung in der Praxis</h3><p>MFA prüft den vorbereiteten Vorschlag und ergänzt bei Bedarf. Standardfälle werden vom System vorbereitet – ein Klick zur Bestätigung genügt.</p></div>
         </div>
         <div class="feat-card-row" da="s" dd="3">
-          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-          <div><h3>Mehr Ruhe im Alltag</h3><p>Keine ständigen Störungen mehr – entspannte, fokussierte Aufgaben für Ihr gesamtes Team. Wohlbefinden und Qualität steigen messbar.</p></div>
+          <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><h3>5:00 – Antwort beim Patienten</h3><p>Rückmeldung über denselben Kanal – Anliegen erledigt. Egal ob Anruf, Fax oder E-Mail: Der Patient bekommt seine Antwort schnell und ohne Nachfragen.</p></div>
         </div>
       </div>
       <div class="feat-img" da="l" dd="2">
         <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=700&q=80" alt="Medizinisches Team">
         <div class="feat-img-badge">
           <div class="feat-img-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div><div class="feat-img-badge-num">90 Sek.</div><div class="feat-img-badge-label">Reaktionszeit</div></div>
+          <div><div class="feat-img-badge-num">≤ 5 Min</div><div class="feat-img-badge-label">Bis zur Erledigung</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:56px" da dd="4">
+      <a href="#termin" class="btn btn-primary" style="margin-right:12px">Demo in 30 Min. vereinbaren</a>
+      <a href="#anliegen" class="btn btn-outline-dark">Alle Anliegen-Typen ansehen</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Kein Doctolib ─── -->
+<section style="padding:80px 24px;background:var(--bg)">
+  <div class="container">
+    <div class="disclaimer-ribbon" da>
+      <strong>Wichtig zur Einordnung:</strong> PraxiGate ist <strong>KEINE Online-Terminbuchungsplattform</strong> – wir sind <strong>KEIN Doctolib</strong>. Wir ersetzen keine Terminbuchungssoftware. PraxiGate ist die Kommunikationsschicht zwischen Patient und Praxis – über die Kanäle, die Patienten heute schon nutzen: Telefon, Fax und E-Mail.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div class="feat-card-row" da="s" dd="1" style="flex-direction:column;align-items:flex-start;gap:14px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+        <div>
+          <h3>Was Doctolib &amp; Co. tun</h3>
+          <ul style="margin:8px 0 0;padding-left:18px;color:var(--text);font-size:.9rem;line-height:1.8">
+            <li>Termine über ein neues Portal buchen</li>
+            <li>Patienten müssen sich registrieren &amp; einloggen</li>
+            <li>Patientendaten in der Cloud des Anbieters</li>
+            <li>Nur ein Anliegen-Typ: Termin</li>
+          </ul>
+        </div>
+      </div>
+      <div class="feat-card-row" da="s" dd="2" style="flex-direction:column;align-items:flex-start;gap:14px;border-color:rgba(43,127,255,.3)">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div>
+          <h3>Was PraxiGate tut</h3>
+          <ul style="margin:8px 0 0;padding-left:18px;color:var(--text);font-size:.9rem;line-height:1.8">
+            <li>Patient nutzt <strong>bestehende Kanäle</strong>: Telefon, Fax, E-Mail</li>
+            <li>Keine App, kein Login, keine Hürde für den Patienten</li>
+            <li>Alle Anliegen-Typen: Termin, Rezept, AU, Überweisung u. v. m.</li>
+            <li><strong>Optional vollständig lokal</strong> – Daten bleiben in Ihrer Praxis</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── Für Patienten + Zukunft ─── -->
-<section class="feat-section">
+<!-- ─── Anliegen-Typen ─── -->
+<section id="anliegen" class="feat-section alt">
   <div class="container">
     <div class="sec-head">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihre Patienten</div>
-      <h2 class="h2" da dd="1">Einfach. Verständlich. Sofort erreichbar.</h2>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Alle Anliegen-Typen</div>
+      <h2 class="h2" da dd="1">Termin, Rezept, AU, Überweisung – und vieles mehr.</h2>
+      <p class="sub sec-head" da dd="2">PraxiGate bearbeitet jede Art von Patientenanfrage. Siomet erweitert die Szenarien kontinuierlich – ohne Aufwand für Ihre Praxis.</p>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:800px;margin:0 auto 80px">
+    <div class="anliegen-grid">
+      <div class="feat-card-row" da="s" dd="1" style="flex-direction:column;gap:12px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div><h3>Termin</h3><p style="font-size:.875rem">Vereinbarung, Verschiebung, Absage – sprechstundenkonform mit Ihrem PVS abgestimmt.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="2" style="flex-direction:column;gap:12px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+        <div><h3>Folgerezept</h3><p style="font-size:.875rem">Erkennt Medikament, gleicht mit Verordnungsverlauf ab und legt zur Freigabe vor.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="3" style="flex-direction:column;gap:12px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div><h3>Arbeitsunfähigkeit (AU)</h3><p style="font-size:.875rem">Krankschreibung anfragen, verlängern, an Patient und Arbeitgeber rückmelden.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="4" style="flex-direction:column;gap:12px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+        <div><h3>Überweisung</h3><p style="font-size:.875rem">Anforderung an Fachärzte, Routing zur zuständigen MFA, Dokumentation in der Akte.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="1" style="flex-direction:column;gap:12px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
+        <div><h3>Befund-Anfrage</h3><p style="font-size:.875rem">Status, Bereitstellung, sichere Übermittlung – ohne Telefonie-Engpass.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="2" style="flex-direction:column;gap:12px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.42 2 2 0 0 1 3.6 1.23h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><h3>Rückruf</h3><p style="font-size:.875rem">Rückrufwünsche aus allen Kanälen werden gebündelt und priorisiert.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="3" style="flex-direction:column;gap:12px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div><h3>Allgemeine Fragen</h3><p style="font-size:.875rem">Öffnungszeiten, Wege, organisatorische Auskünfte – sofort und automatisch beantwortet.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="4" style="flex-direction:column;gap:12px;border-color:rgba(43,127,255,.3)">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div><h3>Weitere Szenarien</h3><p style="font-size:.875rem">Siomet erweitert das Repertoire laufend – neue Anliegen-Typen werden ohne Praxis-Aufwand ergänzt.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Multilinguale Kommunikation ─── -->
+<section id="sprachen" class="feat-section">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Multilinguale Patientenkommunikation</div>
+      <h2 class="h2" da dd="1">Ihre Patienten in ihrer Sprache – ohne Mehraufwand für die Praxis.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:900px;margin:0 auto 80px">
       <div class="feat-card-row" da="s" dd="1" style="flex-direction:column;gap:14px">
         <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-        <div><h3>Jederzeit erreichbar</h3><p>Rund um die Uhr – Patienten können sich jederzeit melden, Termine vereinbaren und Anliegen klären, auch außerhalb der Öffnungszeiten.</p></div>
+        <div>
+          <h3>Automatische Übersetzung</h3>
+          <p>PraxiGate kommuniziert mit Patienten in ihrer Muttersprache. Ihre MFAs antworten weiterhin auf Deutsch – die Übersetzung in beide Richtungen erfolgt automatisch.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px">
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:.8rem;color:var(--dark)">Deutsch</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:.8rem;color:var(--dark)">Englisch</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:.8rem;color:var(--dark)">Türkisch</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:.8rem;color:var(--dark)">Russisch</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:.8rem;color:var(--dark)">Arabisch</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:.8rem;color:var(--dark)">Ukrainisch</span>
+            <span style="background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:.8rem;color:var(--dark)">+ weitere</span>
+          </div>
+        </div>
       </div>
       <div class="feat-card-row" da="s" dd="2" style="flex-direction:column;gap:14px">
         <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <div><h3>Multilanguage-Funktion</h3><p>PraxiGate kommuniziert in der Muttersprache Ihrer Patienten – Deutsch, Englisch und viele weitere Sprachen ohne Schwellen.</p></div>
+        <div><h3>Kein Aufwand für Ihre Praxis</h3><p>Ihr Team kommuniziert immer auf Deutsch. PraxiGate übernimmt die Übersetzung automatisch – in der Anfrage wie in der Antwort. Keine Schulung nötig.</p></div>
       </div>
     </div>
     <div class="sec-head" style="margin-bottom:40px">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Für Ihre Zukunft</div>
-      <h2 class="h2" da dd="1">Lösungen, die mitdenken und mitwachsen.</h2>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Kontinuierliche Weiterentwicklung</div>
+      <h2 class="h2" da dd="1">Siomet arbeitet permanent an Verbesserungen und neuen Features.</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:800px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:900px;margin:0 auto">
       <div class="feat-card-row" da="s" dd="1" style="flex-direction:column;gap:14px">
         <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
-        <div><h3>Immer aktuell</h3><p>Regelmäßige Updates halten Sie technologisch immer einen Schritt voraus – agil und mit Ihren Praxiswünschen abgestimmt.</p></div>
+        <div><h3>Permanente Verbesserung</h3><p>Stabilität, Geschwindigkeit und Bedienkomfort werden laufend optimiert – automatisch in der Cloud, koordiniert für lokale Installationen.</p></div>
       </div>
       <div class="feat-card-row" da="s" dd="2" style="flex-direction:column;gap:14px">
         <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-        <div><h3>Innovative Technik</h3><p>Modernste Netzwerke, fortlaufend perfektionierte Funktionen – ein zuverlässiger, schneller Kommunikationsstrom für Ihre Praxis.</p></div>
+        <div><h3>Neue Features</h3><p>Funktionen, die direkt aus Praxis-Feedback entstehen, gehen regelmäßig live – entwickelt von Siomet in engem Dialog mit MFAs und Ärzten.</p></div>
+      </div>
+      <div class="feat-card-row" da="s" dd="3" style="flex-direction:column;gap:14px">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><h3>Erweiterte Szenarien</h3><p>Neue Anliegen-Typen werden ergänzt – Ihre Praxis muss nichts dafür konfigurieren. Das System wächst mit, ohne dass Aufwand entsteht.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Zwei Varianten ─── -->
+<section id="varianten" style="padding:100px 24px;background:var(--bg)">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Zwei Varianten – Sie entscheiden</div>
+      <h2 class="h2" da dd="1">PraxiGate Cloud oder PraxiGate Lokal.</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">Manche Praxen wollen ohne IT-Aufwand starten. Andere möchten jeden Patientendatensatz ausschließlich im Haus halten. Beides geht – mit derselben Plattform.</p>
+    </div>
+    <div class="test-grid">
+      <div class="test-card" da="s" dd="1">
+        <div class="test-tag tag-green">Variante A</div>
+        <h3>PraxiGate Cloud</h3>
+        <p>Sofort startklar. Wir betreiben PraxiGate in einem deutschen Rechenzentrum nach DSGVO-Maßstäben. Keine eigene Hardware nötig, Updates automatisch eingespielt – geeignet für kleine bis mittlere Praxen.</p>
+        <a href="#termin" class="btn btn-outline-dark" style="align-self:flex-start">Demo vereinbaren</a>
+      </div>
+      <div class="test-card featured" da="s" dd="2">
+        <div class="test-tag tag-white">Variante B · Maximale Datensouveränität</div>
+        <h3>PraxiGate Lokal (On-Premise)</h3>
+        <p>Die Plattform läuft vollständig in Ihrer Praxis – alle Patientendaten bleiben lokal. Option 1: Installation auf Ihrer bestehenden Praxis-Hardware. Option 2: Installation auf der von uns mitgelieferten Hardware.</p>
+        <a href="#termin" class="btn btn-white" style="align-self:flex-start">Lokale Variante besprechen</a>
       </div>
     </div>
   </div>
@@ -634,82 +782,29 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
 <section id="stats">
   <div class="container">
     <div class="sec-head">
-      <div class="sec-badge white" da><span class="sec-badge-dot"></span>Warum PraxiGate</div>
-      <h2 class="h2 white" da dd="1">Messbare Ergebnisse für Ihre Praxis</h2>
+      <div class="sec-badge white" da><span class="sec-badge-dot"></span>Was PraxiGate bewirkt</div>
+      <h2 class="h2 white" da dd="1">Messbarer Nutzen für Ihre Praxis</h2>
     </div>
     <div class="stats-grid">
       <div class="stat-card" da="s" dd="1">
         <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="stat-num"><span data-countup="90">0</span> Sek</div>
-        <div class="stat-label">Automatisierte Erkennung in unter 90 Sekunden</div>
+        <div class="stat-num">≤ <span data-countup="5">0</span><span style="font-size:1.5rem"> Min</span></div>
+        <div class="stat-label">Vom Patientenanliegen bis zur Erledigung</div>
       </div>
       <div class="stat-card" da="s" dd="2">
-        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-        <div class="stat-num"><span data-countup="98">0</span><span>%</span></div>
-        <div class="stat-label">Erreichbarkeitsrate rund um die Uhr</div>
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="stat-num"><span>3</span><span style="color:#60a5fa"> → 1</span></div>
+        <div class="stat-label">Drei Kanäle, ein einheitlicher Posteingang</div>
       </div>
       <div class="stat-card" da="s" dd="3">
-        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-        <div class="stat-num"><span data-countup="40">0</span><span>%</span></div>
-        <div class="stat-label">Weniger Stress für MFAs und das Team</div>
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="stat-num"><span data-countup="100">0</span><span>%</span></div>
+        <div class="stat-label">Patientendaten lokal in der On-Premise-Variante</div>
       </div>
       <div class="stat-card" da="s" dd="4">
-        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-        <div class="stat-num"><span data-countup="0">0</span><span style="font-size:1.5rem"> Cloud</span></div>
-        <div class="stat-label">Alle Daten bleiben lokal in Ihrer Praxis</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── Steps ─── -->
-<section id="steps">
-  <div class="container">
-    <div class="sec-head">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Einfacher Start</div>
-      <h2 class="h2" da dd="1">So einfach starten Sie mit PraxiGate</h2>
-      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">In nur drei Schritten ist Ihre Praxis bereit.</p>
-    </div>
-    <div class="steps-row">
-      <div class="step-box" da="s" dd="1">
-        <div class="step-circle">1</div>
-        <h3>Kontakt aufnehmen</h3>
-        <p>Sie nehmen mit uns Kontakt auf, wir besprechen gemeinsam Ihre Bedürfnisse und finden die optimale Lösung für Ihre Praxis.</p>
-      </div>
-      <div class="step-box" da="s" dd="2">
-        <div class="step-circle">2</div>
-        <h3>Einrichtung durch unser Team</h3>
-        <p>Unser Team übernimmt die vollständige Einrichtung, damit Ihr System von Anfang an reibungslos und zuverlässig läuft.</p>
-      </div>
-      <div class="step-box" da="s" dd="3">
-        <div class="step-circle">3</div>
-        <h3>Loslegen!</h3>
-        <p>Sie starten in Ihre entspannte Praxis und genießen klare Kommunikation und entlastete Mitarbeiter ab dem ersten Tag.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── Demo ─── -->
-<section id="demo" style="padding:100px 24px;background:var(--bg)">
-  <div class="container">
-    <div class="sec-head">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Kostenlos testen</div>
-      <h2 class="h2" da dd="1">Testen Sie PraxiGate – einfach, unverbindlich und kostenlos</h2>
-      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">PraxiGate kennenlernen – entspannt und unverbindlich.</p>
-    </div>
-    <div class="test-grid">
-      <div class="test-card" da="s" dd="1">
-        <div class="test-tag tag-green">Schneller Einblick</div>
-        <h3>Schneller Einblick in unser System</h3>
-        <p>Vereinbaren Sie einen kurzen, unverbindlichen Demo-Termin. Lernen Sie PraxiGate kennen und entdecken Sie die Stärken ohne technischen Aufwand.</p>
-        <a href="#termin" class="btn btn-outline-dark" style="align-self:flex-start">Demo vereinbaren</a>
-      </div>
-      <div class="test-card featured" da="s" dd="2">
-        <div class="test-tag tag-white">Empfohlen</div>
-        <h3>Kostenloser 4-Wochen-Testzeitraum</h3>
-        <p>Probieren Sie PraxiGate vier Wochen lang unverbindlich aus – ohne Verpflichtung. So haben Sie alle Zeit, in Ruhe eine fundierte Entscheidung zu treffen.</p>
-        <a href="#termin" class="btn btn-white" style="align-self:flex-start">4 Wochen kostenlos testen</a>
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="stat-num"><span data-countup="8">0</span><span>+</span></div>
+        <div class="stat-label">Sprachen über die Multilingual-Engine abgedeckt</div>
       </div>
     </div>
   </div>
@@ -719,14 +814,14 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
 <section id="testimonials">
   <div class="container">
     <div class="sec-head">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Kundenstimmen</div>
-      <h2 class="h2" da dd="1">Was unsere Kunden sagen</h2>
-      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">Gedanken und Eindrücke direkt aus dem Arbeitsalltag.</p>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Stimmen aus der Praxis</div>
+      <h2 class="h2" da dd="1">Was unsere Anwender berichten</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">Gedanken und Eindrücke direkt aus dem Praxisalltag.</p>
     </div>
     <div class="testi-grid">
       <div class="testi-card" da="s" dd="1">
         <div class="stars" data-stars><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-        <p class="testi-text">„PraxiGate hat mich von Anfang an überzeugt. Der Praxisalltag läuft deutlich entspannter – das Team ist ausgeglichener und die Patienten zufriedener."</p>
+        <p class="testi-text">„Anrufe, Faxe und Mails laufen jetzt an einer Stelle zusammen. Wir beantworten in Minuten, was früher Stunden brauchte."</p>
         <div class="testi-author">
           <div class="testi-avatar">TK</div>
           <div><div class="testi-name">Dr. med. Thomas K.</div><div class="testi-role">Allgemeinarzt</div></div>
@@ -734,24 +829,193 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
       </div>
       <div class="testi-card" da="s" dd="2">
         <div class="stars" data-stars><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-        <p class="testi-text">„Schnelle Antworten, intuitives Tool – endlich unterbrechen keine ständigen Anrufe mehr den Arbeitsalltag. Ich kann mich voll auf meine Patienten konzentrieren."</p>
-        <div class="testi-author">
-          <div class="testi-avatar">LS</div>
-          <div><div class="testi-name">Layla S.</div><div class="testi-role">Medizinische Fachangestellte</div></div>
-        </div>
-      </div>
-      <div class="testi-card" da="s" dd="3">
-        <div class="stars" data-stars><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-        <p class="testi-text">„Struktur, Übersicht, und endlich können wir Datenschutz wirklich leben. Genau das brauchen wir im Alltag – PraxiGate ist die Lösung, die wir gesucht haben."</p>
+        <p class="testi-text">„Die lokale Variante war für uns entscheidend – Patientendaten gehen nicht in eine fremde Cloud. Endlich Datenschutz, der wirklich greift."</p>
         <div class="testi-author">
           <div class="testi-avatar">AR</div>
           <div><div class="testi-name">Anna R.</div><div class="testi-role">Praxismanagerin</div></div>
         </div>
       </div>
+      <div class="testi-card" da="s" dd="3">
+        <div class="stars" data-stars><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <p class="testi-text">„Endlich ein Posteingang statt drei. Ich weiß sofort, was offen ist und was erledigt. Keine Zettelwirtschaft mehr."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">LS</div>
+          <div><div class="testi-name">Layla S.</div><div class="testi-role">Medizinische Fachangestellte</div></div>
+        </div>
+      </div>
     </div>
     <div class="testi-cta" da dd="4">
-      <p>Noch unsicher? Lassen Sie sich überzeugen – ganz unverbindlich.</p>
+      <p>Noch unsicher? Lassen Sie sich 30 Minuten live überzeugen.</p>
       <a href="#termin" class="btn btn-primary">Demo vereinbaren</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Datensicherheit ─── -->
+<section id="datenschutz" class="feat-section">
+  <div class="container">
+    <div class="feat-layout">
+      <div>
+        <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Datenschutz &amp; Datensicherheit</div>
+        <h2 class="h2" da dd="1">Patientendaten bleiben da, wo sie hingehören – in Ihrer Praxis.</h2>
+        <p style="font-size:.9375rem;color:var(--text);line-height:1.75;margin-bottom:28px" da dd="2">Patientendaten sind keine Marketingdaten. Deshalb haben wir PraxiGate so gebaut, dass Sie sich für die <strong>kompromisslos lokale Variante</strong> entscheiden können: Keine Übertragung an externe Server, keine Verarbeitung in fremden Clouds, keine Drittländer.</p>
+        <div class="principles" da dd="3">
+          <div class="principle"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>Stringente Lokalität</strong> – Daten verlassen Ihre Praxis nicht</div></div>
+          <div class="principle"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>DSGVO &amp; BDSG</strong> – vollständig konform, auditierbar</div></div>
+          <div class="principle"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>Rollenbasierter Zugriff</strong> – wer sieht was, entscheiden Sie</div></div>
+          <div class="principle"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>Auditierbarkeit</strong> – lückenloser Nachweis, wer wann was bearbeitet hat</div></div>
+        </div>
+      </div>
+      <div da="r" dd="2">
+        <div style="background:linear-gradient(135deg,#0a1628 0%,#0d2563 100%);border-radius:var(--r);padding:48px 40px;min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center">
+          <div style="width:80px;height:80px;background:rgba(43,127,255,.2);border:2px solid rgba(43,127,255,.4);border-radius:50%;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" width="40" height="40"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10" stroke="#4ade80" stroke-width="2"/></svg>
+          </div>
+          <div style="color:#fff;font-size:1.125rem;font-weight:800;line-height:1.3">100% Ihrer Patientendaten<br>in Ihrer Praxis</div>
+          <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:260px">
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+              <span style="font-size:.8rem;color:rgba(255,255,255,.85);font-weight:600">Kein externer Cloud-Server</span>
+            </div>
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+              <span style="font-size:.8rem;color:rgba(255,255,255,.85);font-weight:600">Keine Drittländer-Übertragung</span>
+            </div>
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+              <span style="font-size:.8rem;color:rgba(255,255,255,.85);font-weight:600">DSGVO-konform &amp; auditiert</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Vergleich ─── -->
+<section id="vergleich" class="feat-section alt">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Direktvergleich</div>
+      <h2 class="h2" da dd="1">PraxiGate vs. typische Cloud-Wettbewerber</h2>
+      <p class="sub sec-head" da dd="2">Viele Wettbewerber sind reine Cloud-Lösungen, ausgelegt auf Online-Terminbuchung. PraxiGate ist eine Kommunikationsplattform – und kann zusätzlich vollständig lokal betrieben werden.</p>
+    </div>
+    <div class="compare-wrap" da dd="3">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:40%">Kriterium</th>
+            <th>PraxiGate</th>
+            <th>Typische Cloud-Wettbewerber</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Vereint Telefon, Fax und E-Mail (Unified Messaging)</td>
+            <td class="yes">Ja</td>
+            <td class="no">Meist nein – Fokus auf einen Kanal / Buchung</td>
+          </tr>
+          <tr>
+            <td>Online-Terminbuchungsportal (Doctolib-Modell)</td>
+            <td>Nicht der Fokus – PraxiGate ist KEIN Doctolib</td>
+            <td class="yes">Ja</td>
+          </tr>
+          <tr>
+            <td>Lokale Installation (On-Premise) möglich</td>
+            <td class="yes">Ja – auf eigener oder mitgelieferter Hardware</td>
+            <td class="no">Nein</td>
+          </tr>
+          <tr>
+            <td>Patientendaten verbleiben in der Praxis</td>
+            <td class="yes">Ja (in lokaler Variante stringent lokal)</td>
+            <td class="no">Nein – Verarbeitung in der Anbieter-Cloud</td>
+          </tr>
+          <tr>
+            <td>Abgedeckte Anliegen-Typen</td>
+            <td class="yes">Termin, Rezept, AU, Überweisung u. v. m.</td>
+            <td>Meist nur Termin</td>
+          </tr>
+          <tr>
+            <td>Mehrsprachige Patientenkommunikation</td>
+            <td class="yes">Ja – automatische Übersetzung in beide Richtungen</td>
+            <td>Teilweise</td>
+          </tr>
+          <tr>
+            <td>Patient braucht App oder Account</td>
+            <td class="yes">Nein – bestehende Kanäle, kein Login</td>
+            <td class="no">Ja, in der Regel</td>
+          </tr>
+          <tr>
+            <td>Kontinuierliche Erweiterung der Szenarien</td>
+            <td class="yes">Ja – durch Siomet, ohne Aufwand für die Praxis</td>
+            <td>Variabel</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Über uns ─── -->
+<section id="ueber-uns">
+  <div class="about-layout">
+    <div class="about-img" da="l">
+      <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=700&q=80" alt="Medizinisches Team">
+    </div>
+    <div>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Über Siomet</div>
+      <h2 class="h2" da dd="1">Siomet – das Team hinter PraxiGate.</h2>
+      <p style="font-size:1.0625rem;font-weight:700;color:var(--dark);margin-bottom:14px" da dd="2">Entwickelt im engen Dialog mit MFAs und Ärzten</p>
+      <p style="font-size:.9375rem;color:var(--text);line-height:1.75;margin-bottom:8px" da dd="3">Wir sind Siomet. Wir entwickeln PraxiGate gemeinsam mit MFAs und Ärzten aus echten Praxisbedürfnissen heraus – und verbessern die Plattform permanent. Sitz und Entwicklung in Deutschland.</p>
+      <div class="principles">
+        <div class="principle" da dd="3"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Permanente Verbesserung der Plattform</div>
+        <div class="principle" da dd="4"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Neue Features aus echtem Praxis-Feedback</div>
+        <div class="principle" da dd="5"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Kontinuierliche Erweiterung der Anliegen-Szenarien</div>
+        <div class="principle" da dd="6"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Sitz und Entwicklung in Deutschland</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Integration ─── -->
+<section id="integration">
+  <div class="int-orb"></div>
+  <div class="int-rings"><div class="int-ring"></div><div class="int-ring"></div><div class="int-ring"></div></div>
+  <div class="int-content">
+    <div class="int-logo" da>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><path d="M9 6h9v9"/></svg>
+    </div>
+    <div class="sec-badge white" da dd="1"><span class="sec-badge-dot"></span>Integration</div>
+    <h2 class="h2 white" da dd="2">Nahtlos in Ihren Praxisalltag eingebunden.</h2>
+    <p class="sub white" style="text-align:center;margin:16px auto 36px" da dd="3">PraxiGate verbindet sich mit gängigen Praxisverwaltungssystemen (PVS). Der Posteingang spiegelt den Praxisstatus – Erledigungen werden direkt dokumentiert.</p>
+    <a href="#termin" class="btn btn-primary" da dd="4">Integration besprechen</a>
+  </div>
+</section>
+
+<!-- ─── Steps ─── -->
+<section id="steps">
+  <div class="container">
+    <div class="sec-head">
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Einfacher Start</div>
+      <h2 class="h2" da dd="1">In drei Schritten startklar</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">Kein großer IT-Aufwand. Wir übernehmen die Einrichtung – Sie legen los.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-box" da="s" dd="1">
+        <div class="step-circle">1</div>
+        <h3>Demo vereinbaren</h3>
+        <p>In 30 Minuten zeigen wir Ihnen den Unified-Messaging-Posteingang, die Anliegen-Typen und besprechen Cloud vs. lokale Installation.</p>
+      </div>
+      <div class="step-box" da="s" dd="2">
+        <div class="step-circle">2</div>
+        <h3>Einrichtung durch Siomet</h3>
+        <p>Unser Team übernimmt die vollständige Einrichtung und Integration mit Ihrem PVS – reibungslos und ohne großen technischen Aufwand.</p>
+      </div>
+      <div class="step-box" da="s" dd="3">
+        <div class="step-circle">3</div>
+        <h3>Loslegen &amp; entlasten</h3>
+        <p>Ab dem ersten Tag: Ein Posteingang für alle Kanäle, Anliegen in unter 5 Minuten erledigt, Ihr Team entspannter im Alltag.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -760,9 +1024,9 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
 <section id="termin" style="padding:100px 24px;background:var(--bg)">
   <div class="container">
     <div class="sec-head">
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Terminbuchung</div>
-      <h2 class="h2" da dd="1">Termin buchen – wählen Sie Ihren Wunschtermin</h2>
-      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">Buchen Sie unkompliziert online einen Termin für Demo oder Beratung.</p>
+      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Demo &amp; Beratung buchen</div>
+      <h2 class="h2" da dd="1">Persönliche Live-Demo vereinbaren</h2>
+      <p class="sub" style="margin:0 auto;text-align:center" da dd="2">30 Minuten, unverbindlich – wir zeigen Ihnen PraxiGate live. 4 Wochen kostenfreier Testbetrieb möglich.</p>
     </div>
     <div class="cal-wrap" da dd="3">
       <div class="cal-head">
@@ -808,42 +1072,6 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
         <div class="success-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12" class="ck"/></svg></div>
         <div class="success-title">Vielen Dank!</div>
         <p class="success-msg" id="calSuccessMsg"></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── Integration ─── -->
-<section id="integration">
-  <div class="int-orb"></div>
-  <div class="int-rings"><div class="int-ring"></div><div class="int-ring"></div><div class="int-ring"></div></div>
-  <div class="int-content">
-    <div class="int-logo" da>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><path d="M9 6h9v9"/></svg>
-    </div>
-    <div class="sec-badge white" da dd="1"><span class="sec-badge-dot"></span>Integration</div>
-    <h2 class="h2 white" da dd="2">Nahtlose Integration mit Ihrem PVS</h2>
-    <p class="sub white" style="text-align:center;margin:16px auto 36px" da dd="3">PraxiGate verbindet sich mit allen gängigen Praxisverwaltungssystemen – schnell, einfach und ohne großen technischen Aufwand.</p>
-    <a href="#termin" class="btn btn-primary" da dd="4">Jetzt testen</a>
-  </div>
-</section>
-
-<!-- ─── Über uns ─── -->
-<section id="ueber-uns">
-  <div class="about-layout">
-    <div class="about-img" da="l">
-      <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=700&q=80" alt="Medizinisches Team">
-    </div>
-    <div>
-      <div class="sec-badge blue" da><span class="sec-badge-dot"></span>Über uns</div>
-      <h2 class="h2" da dd="1">Gemeinsam mit der Praxis entwickelt – für echte Bedürfnisse im Alltag</h2>
-      <p style="font-size:1.0625rem;font-weight:700;color:var(--dark);margin-bottom:14px" da dd="2">Was uns antreibt: Verständliche Kommunikation</p>
-      <p style="font-size:.9375rem;color:var(--text);line-height:1.75;margin-bottom:8px" da dd="3">PraxiGate ist ein intelligentes System, entwickelt aus Praxiserfahrung. Wir lernen aus dem Alltag, sprechen mit den Anwendern und verstehen Bedürfnisse, bevor wir Lösungen entwickeln.</p>
-      <div class="principles">
-        <div class="principle" da dd="3"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Innovation mit MFAs und Ärzten</div>
-        <div class="principle" da dd="4"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Fokus auf Mensch und Alltag</div>
-        <div class="principle" da dd="5"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Direkter Praxisbezug statt Theorie</div>
-        <div class="principle" da dd="6"><div class="p-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Kontinuierlicher Dialog im Fortschritt</div>
       </div>
     </div>
   </div>
@@ -904,18 +1132,20 @@ footer{background:var(--dark);padding:56px 24px 32px;position:relative;overflow:
             <path d="M118.28,20.45V9.09h-4.36v-2.11h10.97v2.11h-4.36v11.35h-2.25Z"/>
             <path d="M126.39,20.45V6.98h8.7v2.11h-6.44v3.32h5.32v2.11h-5.32v3.81h6.44v2.11h-8.7Z"/>
           </svg>
-          <div class="footer-tagline">be always available</div>
+          <div class="footer-tagline">Unified Messaging für Praxen &amp; MVZ</div>
         </div>
       </div>
       <div class="footer-links">
+        <a href="#was-ist">Was ist PraxiGate</a>
+        <a href="#varianten">Cloud &amp; Lokal</a>
+        <a href="#vergleich">Vergleich</a>
         <a href="#kontakt">Kontakt</a>
         <a href="#">Datenschutz</a>
-        <a href="#">AGB</a>
         <a href="#">Impressum</a>
-        <a href="#termin" class="pill">Termin buchen</a>
+        <a href="#termin" class="pill">Demo buchen</a>
       </div>
     </div>
-    <div class="footer-bottom">© 2025 PraxiGate Systems GmbH. Alle Rechte vorbehalten.</div>
+    <div class="footer-bottom">PraxiGate ist ein Produkt von Siomet. © 2026 Siomet / PraxiGate Systems GmbH. Alle Rechte vorbehalten.</div>
   </div>
 </footer>
 
