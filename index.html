@@ -442,6 +442,41 @@ footer{background:#0d1e38;padding:64px 0 0;position:relative}
 .preise-note{text-align:center;margin-top:36px;font-size:.9rem;color:var(--muted)}
 .preise-note a{color:var(--accent);font-weight:600}
 .preise-note a:hover{text-decoration:underline}
+/* ─── Angebot Form ─── */
+.angebot-wrap{max-width:480px;margin:56px auto 0}
+.angebot-card{background:#fff;border:1.5px solid #e0e8f4;border-radius:var(--r);padding:32px 32px 28px;box-shadow:0 4px 32px rgba(10,22,40,.08)}
+.angebot-progress{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:28px}
+.angebot-seg{height:4px;border-radius:3px;background:#e8edf5;transition:background .4s}
+.angebot-seg.done{background:linear-gradient(90deg,#14b8a6,#2B7FFF)}
+.angebot-title{font-size:1.125rem;font-weight:800;color:var(--dark);margin-bottom:20px;letter-spacing:-.3px}
+.angebot-label{font-size:.8125rem;font-weight:600;color:var(--dark);margin-bottom:10px;display:block}
+.angebot-model-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.angebot-model-card{border:1.5px solid #e0e8f4;border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.angebot-model-card:hover{border-color:rgba(43,127,255,.35)}
+.angebot-model-card.selected{border-color:var(--accent);background:rgba(43,127,255,.05);box-shadow:0 0 0 3px rgba(43,127,255,.1)}
+.angebot-model-icon{font-size:1.375rem;margin-bottom:6px}
+.angebot-model-name{font-size:.875rem;font-weight:700;color:var(--dark)}
+.angebot-select{width:100%;padding:11px 14px;border:1.5px solid #dde5f4;border-radius:10px;font-size:.9375rem;font-family:inherit;color:var(--dark);background:#fff;outline:none;cursor:pointer;transition:border-color .2s,box-shadow .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 4.5L11 1' stroke='%237a8fad' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;margin-bottom:16px}
+.angebot-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(43,127,255,.1)}
+.angebot-input{width:100%;padding:11px 14px;border:1.5px solid #dde5f4;border-radius:10px;font-size:.9375rem;font-family:inherit;color:var(--dark);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:12px;box-sizing:border-box}
+.angebot-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(43,127,255,.1)}
+.angebot-checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.angebot-checkbox-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+.angebot-checkbox-row label{font-size:.8rem;color:var(--muted);line-height:1.5;cursor:pointer}
+.angebot-checkbox-row label a{color:var(--accent);text-decoration:none}
+.angebot-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.angebot-step-label{font-size:.8125rem;color:var(--muted)}
+.angebot-btn-next{background:var(--accent);color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:.9375rem;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .2s,transform .2s}
+.angebot-btn-next:hover{opacity:.88;transform:translateY(-1px)}
+.angebot-btn-next.green{background:#16a34a}
+.angebot-btn-back{background:transparent;border:1.5px solid #dde5f4;color:var(--dark);padding:11px 20px;border-radius:10px;font-size:.9375rem;font-weight:600;font-family:inherit;cursor:pointer;transition:border-color .2s}
+.angebot-btn-back:hover{border-color:var(--accent)}
+.angebot-step{display:none}
+.angebot-step.active{display:block}
+.angebot-success{text-align:center;padding:16px 0 8px}
+.angebot-success-icon{font-size:3rem;margin-bottom:12px}
+.angebot-success-title{font-size:1.25rem;font-weight:800;color:#16a34a;margin-bottom:8px}
+.angebot-success-text{font-size:.9rem;color:var(--muted);line-height:1.6}
 
 /* ─── Demo Section ─── */
 .demo-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1140px;margin:60px auto 0}
@@ -839,7 +874,7 @@ select.demo-input{appearance:none;cursor:pointer;background-image:url("data:imag
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Volle Kontrolle über Ihre Daten</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Geeignet für datenschutzsensible Praxen</li>
         </ul>
-        <a href="#demo" class="preise-btn-ol">Angebot anfragen</a>
+        <button class="preise-btn-ol" onclick="openAngebotWithModel('Lokal')">Angebot anfragen</button>
       </div>
 
       <!-- Semilokal (featured) -->
@@ -856,7 +891,7 @@ select.demo-input{appearance:none;cursor:pointer;background-image:url("data:imag
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>DSGVO-konformes Rechenzentrum (DE)</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Optimale Balance: Leistung &amp; Sicherheit</li>
         </ul>
-        <a href="#demo" class="preise-btn-fill">Angebot anfragen</a>
+        <button class="preise-btn-fill" onclick="openAngebotWithModel('Semilokal')">Angebot anfragen</button>
       </div>
 
       <!-- Cloud -->
@@ -872,12 +907,105 @@ select.demo-input{appearance:none;cursor:pointer;background-image:url("data:imag
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Schnellste Inbetriebnahme</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Deutsches Rechenzentrum</li>
         </ul>
-        <a href="#demo" class="preise-btn-ol">Angebot anfragen</a>
+        <button class="preise-btn-ol" onclick="openAngebotWithModel('Cloud')">Angebot anfragen</button>
       </div>
 
     </div>
 
-    <p class="preise-note" da dd="4">Alle Preise auf Anfrage — individuell kalkuliert nach Ihrer Praxisgröße und KV-Sitzen. <a href="#demo">Jetzt unverbindlich anfragen →</a></p>
+    <div class="angebot-wrap" da dd="4">
+      <div class="angebot-card">
+        <!-- Progress -->
+        <div class="angebot-progress" id="angebotProgress">
+          <div class="angebot-seg done" id="aseg1"></div>
+          <div class="angebot-seg" id="aseg2"></div>
+          <div class="angebot-seg" id="aseg3"></div>
+        </div>
+
+        <!-- Step 1: Modell -->
+        <div class="angebot-step active" id="astep1">
+          <div class="angebot-title">Schritt 1 / 3 — Modell wählen</div>
+          <span class="angebot-label">Welches Modell interessiert Sie?</span>
+          <div class="angebot-model-grid">
+            <div class="angebot-model-card" id="am-lokal" onclick="selectAngebotModel('Lokal')">
+              <div class="angebot-model-icon">🏠</div>
+              <div class="angebot-model-name">Lokal</div>
+            </div>
+            <div class="angebot-model-card selected" id="am-semilokal" onclick="selectAngebotModel('Semilokal')">
+              <div class="angebot-model-icon">⚖️</div>
+              <div class="angebot-model-name">Semilokal</div>
+            </div>
+            <div class="angebot-model-card" id="am-cloud" onclick="selectAngebotModel('Cloud')">
+              <div class="angebot-model-icon">☁️</div>
+              <div class="angebot-model-name">Cloud</div>
+            </div>
+          </div>
+          <div class="angebot-footer">
+            <span class="angebot-step-label">Schritt 1 von 3</span>
+            <button class="angebot-btn-next" onclick="angebotNext(1)">Weiter →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Praxisdetails -->
+        <div class="angebot-step" id="astep2">
+          <div class="angebot-title">Schritt 2 / 3 — Praxisdetails</div>
+          <span class="angebot-label">Anzahl der KV-Sitze in Ihrer Praxis</span>
+          <select class="angebot-select" id="aKvSitze">
+            <option value="1">1 KV-Sitz</option>
+            <option value="2">2 KV-Sitze</option>
+            <option value="3-5">3–5 KV-Sitze</option>
+            <option value="6-10">6–10 KV-Sitze</option>
+            <option value="10+">Mehr als 10</option>
+          </select>
+          <span class="angebot-label">Ihre Praxisverwaltungssoftware (PVS)</span>
+          <select class="angebot-select" id="aPvs">
+            <option value="">Bitte wählen...</option>
+            <option>CGM TURBOMED</option>
+            <option>Medistar</option>
+            <option>Duria</option>
+            <option>x.isynet</option>
+            <option>ALBIS</option>
+            <option>PCS</option>
+            <option>Andere</option>
+          </select>
+          <div class="angebot-footer">
+            <button class="angebot-btn-back" onclick="angebotBack(2)">← Zurück</button>
+            <button class="angebot-btn-next" onclick="angebotNext(2)">Weiter →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Kontaktdaten -->
+        <div class="angebot-step" id="astep3">
+          <div class="angebot-title">Schritt 3 / 3 — Kontaktdaten</div>
+          <span class="angebot-label">Name / Praxisbezeichnung</span>
+          <input class="angebot-input" id="aName" type="text" placeholder="Dr. Müller / Hausarztpraxis Müller">
+          <span class="angebot-label">Telefon</span>
+          <input class="angebot-input" id="aTel" type="tel" placeholder="+49 30 12345678">
+          <span class="angebot-label">E-Mail</span>
+          <input class="angebot-input" id="aEmail" type="email" placeholder="praxis@beispiel.de">
+          <div class="angebot-checkbox-row">
+            <input type="checkbox" id="aCb1">
+            <label for="aCb1">Ich stimme der Verarbeitung meiner personenbezogenen Daten gemäß der <a href="#">Datenschutzerklärung</a> zu.</label>
+          </div>
+          <div class="angebot-checkbox-row">
+            <input type="checkbox" id="aCb2">
+            <label for="aCb2">Ich bin einverstanden, dass PraxiGate mich zur Angebotserstellung kontaktiert.</label>
+          </div>
+          <div class="angebot-footer">
+            <button class="angebot-btn-back" onclick="angebotBack(3)">← Zurück</button>
+            <button class="angebot-btn-next green" onclick="angebotNext(3)">Angebot anfordern ✓</button>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div class="angebot-step" id="astep4">
+          <div class="angebot-success">
+            <div class="angebot-success-icon">✅</div>
+            <div class="angebot-success-title">Vielen Dank!</div>
+            <p class="angebot-success-text">Ihre Anfrage wurde erfolgreich übermittelt.<br>Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1201,6 +1329,66 @@ document.querySelectorAll('.ml').forEach(a=>a.addEventListener('click',closeMob)
   window.addEventListener('resize',tick,{passive:true});
   tick();
 })();
+
+/* ─── Angebot Form ─── */
+let angebotModel = 'Semilokal';
+let angebotCurrentStep = 1;
+
+function selectAngebotModel(model) {
+  angebotModel = model;
+  ['Lokal','Semilokal','Cloud'].forEach(m => {
+    const el = document.getElementById('am-' + m.toLowerCase());
+    if (el) el.classList.toggle('selected', m === model);
+  });
+}
+
+function angebotNext(step) {
+  if (step === 2) {
+    const pvs = document.getElementById('aPvs').value;
+    if (!pvs) { document.getElementById('aPvs').focus(); return; }
+  }
+  if (step === 3) {
+    const name = document.getElementById('aName').value.trim();
+    const email = document.getElementById('aEmail').value.trim();
+    const cb1 = document.getElementById('aCb1').checked;
+    const cb2 = document.getElementById('aCb2').checked;
+    if (!name || !email || !cb1 || !cb2) {
+      if (!name) document.getElementById('aName').focus();
+      else if (!email) document.getElementById('aEmail').focus();
+      return;
+    }
+  }
+  const next = step + 1;
+  document.getElementById('astep' + step).classList.remove('active');
+  document.getElementById('astep' + next).classList.add('active');
+  angebotCurrentStep = next;
+  updateAngebotProgress(next);
+}
+
+function angebotBack(step) {
+  const prev = step - 1;
+  document.getElementById('astep' + step).classList.remove('active');
+  document.getElementById('astep' + prev).classList.add('active');
+  angebotCurrentStep = prev;
+  updateAngebotProgress(prev);
+}
+
+function updateAngebotProgress(step) {
+  for (let i = 1; i <= 3; i++) {
+    const seg = document.getElementById('aseg' + i);
+    if (seg) seg.classList.toggle('done', i <= step);
+  }
+}
+
+/* Pre-select model from pricing cards */
+function openAngebotWithModel(model) {
+  selectAngebotModel(model);
+  document.querySelectorAll('.angebot-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('astep1').classList.add('active');
+  angebotCurrentStep = 1;
+  updateAngebotProgress(1);
+  document.getElementById('astep1').closest('.angebot-card').scrollIntoView({behavior:'smooth',block:'center'});
+}
 
 /* ─── Demo Form ─── */
 let demoType = 'vor-ort';
